@@ -15,9 +15,22 @@
 
 <ion-content padding>
 
-  <ion-input type="text"></ion-input>
-  <ion-input type="password"></ion-input>
-  <button ion-button (click)="tryLogin()">login</button>
+
+  <form #FormLogin="ngForm" (submit)="tryLogin(FormLogin)">
+    <ion-item>
+      <ion-label floating>Username</ion-label>
+      <ion-input [(ngModel)]="FormLogin.username" name="username" type="text" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input [(ngModel)]="FormLogin.password" name="password" type="password" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <button type="submit" [full] ion-button>Login</button>
+    </ion-item>
+
+  </form>
 
 
 </ion-content>

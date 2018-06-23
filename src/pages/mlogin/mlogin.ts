@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {AuthProvider} from "../../providers/auth/auth";
+import {MhomePage} from "../mhome/mhome";
+import { AlertController } from "ionic-angular";
 
 
 @IonicPage()
@@ -12,15 +14,42 @@ export class MloginPage {
 
   loader: any;
 
-  constructor(public auth: AuthProvider, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public auth: AuthProvider,
+    public loadingCtrl: LoadingController,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController) {
   }
 
-  tryLogin(){
+  tryLogin(FormLogin){
+
     this.presentLoading();
 
-    this.auth.loginToMoodle();
+    this.auth.loginToMoodle(FormLogin.value).then(data => {
 
-    this.loader.dismiss();
+      if(data){
+
+        this.loader.dismiss();
+        this.navCtrl.pop();
+        this.navCtrl.push(MhomePage);
+
+      }else{
+        FormLogin.password = "";
+
+        this.loader.dismiss();
+
+        this.alertCtrl.create({
+          title: "Login Failed",
+          subTitle: "Login Failed",
+          buttons: ["OK"]
+        }).present();
+
+      }
+
+    });
+
+    //this.loader.dismiss();
 
   }
 

@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import { Nav, Platform, LoadingController } from 'ionic-angular';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -20,9 +20,13 @@ export class MyApp {
 
   rootPage:any = HomePage;
   pages: Array<{title: string, component: any}>;
-  loader: any;
+  //loader: any;
 
-  constructor(public auth: AuthProvider, public loadingCtrl: LoadingController, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(public auth: AuthProvider,
+              platform: Platform,
+              statusBar: StatusBar,
+              splashScreen: SplashScreen
+  ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -39,17 +43,17 @@ export class MyApp {
 
   openMoodle(){
 
-    this.presentLoading();
+    //this.presentLoading();
 
-    this.auth.checkMoodleLogin().then((isLoggedIn) => {
-      if (isLoggedIn){
+    this.auth.isMoodleLoggedin().then(value => {
+      if(value){
         this.nav.push(MhomePage);
       }else{
         this.nav.push(MloginPage);
       }
-
-      this.loader.dismiss();
     });
+
+    //this.loader.dismiss();
 
   }
 
@@ -57,12 +61,12 @@ export class MyApp {
       this.nav.push(page.component);
   }
 
-  presentLoading(){
-    this.loader = this.loadingCtrl.create({
-      content: "Authenticating..."
-    });
-    this.loader.present();
-  }
+  // presentLoading(){
+  //   this.loader = this.loadingCtrl.create({
+  //     content: "Authenticating..."
+  //   });
+  //   this.loader.present();
+  // }
 
 
 }
