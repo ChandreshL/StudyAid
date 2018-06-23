@@ -9,6 +9,10 @@
 
   <ion-content>
     <ion-list>
+      <button ion-item menuClose (click)="openMoodle()">
+        Moodle
+      </button>
+
       <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)">
         {{ p.title }}
       </button>

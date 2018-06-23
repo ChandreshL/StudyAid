@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
+import {AuthProvider} from "../../providers/auth/auth";
 
-/**
- * Generated class for the MloginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -15,11 +10,25 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MloginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  loader: any;
+
+  constructor(public auth: AuthProvider, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MloginPage');
+  tryLogin(){
+    this.presentLoading();
+
+    this.auth.loginToMoodle();
+
+    this.loader.dismiss();
+
+  }
+
+  presentLoading(){
+    this.loader = this.loadingCtrl.create({
+      content: "Authenticating..."
+    });
+    this.loader.present();
   }
 
 }
