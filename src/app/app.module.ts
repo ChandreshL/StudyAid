@@ -6,11 +6,35 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import {MhomePage} from "../pages/mhome/mhome";
+import {MloginPage} from "../pages/mlogin/mlogin";
+import {MsearchPage} from "../pages/msearch/msearch";
+import {MenrollPage} from "../pages/menroll/menroll";
+import {MdisplayCoursesPage} from "../pages/mdisplay-courses/mdisplay-courses";
+import {McourseListPage} from "../pages/mcourse-list/mcourse-list";
+import {McourseContentPage} from "../pages/mcourse-content/mcourse-content";
+import {ShomePage} from "../pages/shome/shome";
+import {LhomePage} from "../pages/lhome/lhome";
+import {SlistPage} from "../pages/slist/slist";
+import {ScalenderPage} from "../pages/scalender/scalender";
+
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    MhomePage,
+    MloginPage,
+    MsearchPage,
+    MenrollPage,
+    MdisplayCoursesPage,
+    McourseListPage,
+    McourseContentPage,
+    ShomePage,
+    SlistPage,
+    ScalenderPage,
+    LhomePage
+
   ],
   imports: [
     BrowserModule,
@@ -19,7 +43,18 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    MhomePage,
+    MloginPage,
+    MsearchPage,
+    MenrollPage,
+    MdisplayCoursesPage,
+    McourseListPage,
+    McourseContentPage,
+    ShomePage,
+    SlistPage,
+    ScalenderPage,
+    LhomePage
   ],
   providers: [
     StatusBar,
