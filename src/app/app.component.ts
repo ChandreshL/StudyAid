@@ -4,12 +4,11 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import {MhomePage} from "../pages/mhome/mhome";
-import {ShomePage} from "../pages/shome/shome";
-import {LhomePage} from "../pages/lhome/lhome";
-import {MloginPage} from "../pages/mlogin/mlogin";
-import {AuthProvider} from "../providers/auth/auth";
-
+import { MhomePage } from "../pages/mhome/mhome";
+import { ShomePage } from "../pages/shome/shome";
+import { LhomePage } from "../pages/lhome/lhome";
+import { MloginPage } from "../pages/mlogin/mlogin";
+import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
 
 
 @Component({
@@ -22,10 +21,11 @@ export class MyApp {
   pages: Array<{title: string, component: any}>;
   //loader: any;
 
-  constructor(public auth: AuthProvider,
-              platform: Platform,
-              statusBar: StatusBar,
-              splashScreen: SplashScreen
+  constructor(
+      private moodleApi: MoodleApiProvider,
+      platform: Platform,
+      statusBar: StatusBar,
+      splashScreen: SplashScreen
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -45,7 +45,8 @@ export class MyApp {
 
     //this.presentLoading();
 
-    this.auth.isMoodleLoggedin().then(value => {
+    this.moodleApi.isLoggedIn().then(value => {
+
       if(value){
         this.nav.push(MhomePage);
       }else{

@@ -20,7 +20,8 @@ import {LhomePage} from "../pages/lhome/lhome";
 import {SlistPage} from "../pages/slist/slist";
 import {ScalenderPage} from "../pages/scalender/scalender";
 import { AuthProvider } from '../providers/auth/auth';
-
+import {DatabaseProvider} from "../providers/database/database";
+import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
 
 @NgModule({
   declarations: [
@@ -65,7 +66,9 @@ import { AuthProvider } from '../providers/auth/auth';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    AuthProvider,
+    DatabaseProvider,
+    MoodleApiProvider
   ]
 })
 export class AppModule {}

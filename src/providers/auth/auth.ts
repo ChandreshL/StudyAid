@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Storage } from "@ionic/storage";
 
 interface tokenJson {
   token: string,
-  privatetoken: any
+  privatetoken: string
 }
 
 @Injectable()
@@ -20,13 +20,11 @@ export class AuthProvider {
 
   }
 
-  isMoodleLoggedin(){
+  async isMoodleLoggedin(){
 
-      //this.mtoken = this.storage.getItem('mtoken');
-    return this.storage.get('mtoken').then( value => {
+    return await this.storage.get('mtoken').then( value => {
           return value && true;
       });
-
   }
 
   //return true if logged in and false if not.
