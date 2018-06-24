@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {DatabaseProvider, User, Site, IUser} from "../database/database";
+import {DatabaseProvider, User, Site, IUser, ISite} from "../database/database";
 
 /*
   Generated class for the MoodleApiProvider provider.
@@ -15,7 +15,7 @@ export class MoodleApiProvider {
   private authUrl: string = "login/token.php";
   private apiUrl: string = "webservice/rest/server.php";
   private token: string;
-  private userId: string;
+  private userId: number;
 
   constructor(public http: HttpClient, private appdb: DatabaseProvider) {
 
@@ -60,7 +60,7 @@ export class MoodleApiProvider {
 
           this.appdb.saveToDatabase('user' ,data);
 
-          //todo: get sitedata and populate userid
+          this.getSiteInfo();
 
           Loggedin = true;
           resolve(true);
@@ -85,8 +85,53 @@ export class MoodleApiProvider {
 
   }
 
+  getSiteInfo(){
+    let url = this.siteUrl + "/" + this.authUrl;
+
+    const body = new HttpParams()
+      .set("wstoken", this.token)
+      .set("moodlewsrestformat", "json")
+      .set("wsfunction", "core_webservice_get_site_info");
+
+    this.sendPostRequest(url,body.toString()).subscribe((data: ISite) => {
+
+      this.userId = data.userid;
+      this.appdb.saveToDatabase('site', data);
+
+    }, error => {
+      console.log(error);
+    });
+
+  }
+
 
   searchCourse(searchStr){
+
+    let url = this.siteUrl + "/" + this.apiUrl;
+
+    const body = new HttpParams()
+      .set("wstoken", this.token )
+      .set("moodlewsrestformat", "json")
+      .set("wsfunction", "core_course_search_courses")
+      .set("criterianame", "search")
+      .set("criteriavalue", searchStr)
+      .set("page", "0")
+      .set("perpage", "10");
+
+    return new Promise(resolve => {
+
+      this.sendPostRequest(url,body.toString()).subscribe(data => {
+        if(data.hasOwnProperty('courses')){
+          resolve(data);
+        }else{
+          resolve("");
+        }
+      }, error =>{
+        console.log(error);
+        resolve("");
+      });
+
+    });
 
   }
 

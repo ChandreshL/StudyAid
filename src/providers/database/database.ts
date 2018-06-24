@@ -41,6 +41,13 @@ export class DatabaseProvider extends  Dexie{
 
 }
 
+
+
+export interface IContacts {
+  id: number,
+  fullname: string
+}
+
 export interface IUser{
   token: string;
   privatetoken?: string;
@@ -63,6 +70,29 @@ export interface ISite {
 
 }
 
+export interface ImCourse {
+
+  id: number,
+  fullname: string,
+  displayname: string,
+  shortname: string,
+  categoryid: number,
+  categoryname: string,
+  sortorder: number,
+  summary: string,
+  summaryformat: number,
+  summaryfiles: Array<string>,
+  overviewfiles: Array<string>,
+  contacts: Array<IContacts>,
+  enrollmentmethods: Array<string>
+
+}
+
+export interface ImCourseList {
+    total: number,
+    courses: Array<mCourse>,
+    warnings: Array<any>
+}
 
 export class User implements IUser{
 
@@ -126,6 +156,48 @@ export class Site implements  ISite{
       data.hasOwnProperty('userpictureurl') ? data.userpictureurl : ""
     );
 
+  }
+
+}
+
+export class mCourse implements ImCourse{
+
+  constructor(
+    public id: number,
+    public fullname: string,
+    public displayname: string,
+    public shortname: string,
+    public categoryid: number,
+    public categoryname: string,
+    public sortorder: number,
+    public summary: string,
+    public summaryformat: number,
+    public summaryfiles: Array<string>,
+    public overviewfiles: Array<string>,
+    public contacts: Array<IContacts>,
+    public enrollmentmethods: Array<string>
+  ){}
+
+  static fromJSON(data){
+
+    if((typeof data) != "object")
+      data = JSON.parse(data);
+
+    return new mCourse(
+      data.hasOwnProperty('id') ? data.id : "",
+      data.hasOwnProperty('fullname') ? data.fullname : "",
+      data.hasOwnProperty('displayname') ? data.displayname : "",
+      data.hasOwnProperty('shortname') ? data.shortname : "",
+      data.hasOwnProperty('categoryid') ? data.categoryid : "",
+      data.hasOwnProperty('categoryname') ? data.categoryname : "",
+      data.hasOwnProperty('sortorder') ? data.sortorder : "",
+      data.hasOwnProperty('summary') ? data.summary : "",
+      data.hasOwnProperty('summaryformat') ? data.summaryformat : "",
+      null,
+      null,
+      null,
+      data.hasOwnProperty('enrollmentmethods') ? data.enrollmentmethods : ""
+    );
   }
 
 }

@@ -10,16 +10,22 @@
     <ion-title>Search courses</ion-title>
   </ion-navbar>
 
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search courses"
+                   [(ngModel)]="queryText"
+                   (ionInput)="fetchCourses($event)"
+                   [debounce]="400"
+    ></ion-searchbar>
+  </ion-toolbar>
+
 </ion-header>
 
 
 <ion-content padding>
 
-  <ion-searchbar ></ion-searchbar>
-
   <ion-list>
     <ion-item *ngFor="let item of searchResult">
-      {{ item }}
+      {{ item.fullname }}
     </ion-item>
   </ion-list>
 

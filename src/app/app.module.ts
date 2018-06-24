@@ -19,7 +19,6 @@ import {ShomePage} from "../pages/shome/shome";
 import {LhomePage} from "../pages/lhome/lhome";
 import {SlistPage} from "../pages/slist/slist";
 import {ScalenderPage} from "../pages/scalender/scalender";
-import { AuthProvider } from '../providers/auth/auth';
 import {DatabaseProvider} from "../providers/database/database";
 import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
 
@@ -66,7 +65,6 @@ import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider,
     DatabaseProvider,
     MoodleApiProvider
   ]
