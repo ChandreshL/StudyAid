@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {MsearchPage} from "../msearch/msearch";
 import {McourseListPage} from "../mcourse-list/mcourse-list";
+import {MdisplayCoursesPage} from "../mdisplay-courses/mdisplay-courses";
 
 
 @IonicPage()
@@ -19,8 +20,8 @@ export class MhomePage {
     this.navCtrl.push(MsearchPage);
   }
 
-  listCourse(){
-    this.navCtrl.push(McourseListPage);
+  displayCourses(){
+    this.navCtrl.push(MdisplayCoursesPage);
   }
 
 }

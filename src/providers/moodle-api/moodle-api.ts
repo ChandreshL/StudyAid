@@ -170,10 +170,6 @@ export class MoodleApiProvider {
 
   }
 
-  isArray(what) {
-    return Object.prototype.toString.call(what) === '[object Array]';
-  }
-
   enrollInCourse(courseid, password, instanceid){
 
     let url = this.siteUrl + "/" + this.apiUrl;
@@ -260,6 +256,10 @@ export class MoodleApiProvider {
       httpOptions
     )
 
+  }
+
+  isArray(what) {
+    return Object.prototype.toString.call(what) === '[object Array]';
   }
 
 }

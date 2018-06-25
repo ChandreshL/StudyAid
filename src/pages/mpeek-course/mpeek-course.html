@@ -23,10 +23,20 @@
     <ion-item>
       {{ getTeachersName(course.contacts) }}
     </ion-item>
+
+    <ion-item *ngIf="!btnShow">
+      You are enrolled in this course.
+    </ion-item>
+
     <ion-item>
       <button *ngIf="btnShow" ion-button  block color="secondary" (click)="enrollButton()">
         Enroll
       </button>
+
+      <button *ngIf="!btnShow" ion-button  block color="secondary" (click)="viewCourse()">
+        View course
+      </button>
+
     </ion-item>
 
   </ion-list>

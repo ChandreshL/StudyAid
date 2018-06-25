@@ -56,37 +56,39 @@ export class MpeekCoursePage {
 
   ionViewDidEnter(){
 
-    //todo show progress
+    this.presentLoading();
 
     this.moodleApi.getEnrolledCourses().then((data: Array<ImEnrolledCourse>) => {
-      data.forEach(d => {
-        if (d.id = this.course.id){
-          //todo hide enroll button
-          this.btnShow = false;
-        }
-      });
+
+      if(data && this.isArray(data)) {
+        data.forEach(d => {
+          if (d.id == this.course.id) {
+            this.btnShow = false;
+          }
+        });
+      }
+      this.loader.dismiss();
+    }, reason => {
+      console.log("promise error");
+      this.loader.dismiss();
     });
 
   }
 
-
   getTeachersName(contacts: Array<IContacts>){
     let contactsStr = "";
-    console.log(contacts);
     contacts.forEach(c => {
       if(c.fullname) contactsStr+= ", " + c.fullname;
-      console.log(c);
     });
-
     return contactsStr.substr(2);
-
   }
 
   enrollButton(){
     console.log("enrolled clicked");
 
     if(this.requirePassword){
-      this.enrollWithPassword();
+      this.showPrompt();
+      //this.enrollWithPassword();
       return;
     }
 
@@ -105,14 +107,13 @@ export class MpeekCoursePage {
 
         //enroll without enrolkey
         if (this.instanceid && !this.requirePassword) {
-          this.presentLoading();
           this.sendEnrollRequest(this.course.id, this.enrolKey, this.instanceid).then((data: ImSelfEnrolUser) => {
 
             if(data.status){
               console.log("enrolled without password");
 
-              this.navCtrl.popTo(MhomePage);
-              this.navCtrl.push(McourseListPage, { param1: this.course.id});
+              this.loader.dismissAll();
+              this.viewCourse();
 
             }else {
 
@@ -120,17 +121,21 @@ export class MpeekCoursePage {
               data.warnings.forEach(w => {
                 if(w.warningcode == "4") {
                   this.requirePassword = true;
-                  this.enrollWithPassword();
+                  this.loader.dismissAll();
+                  this.showPrompt();
+                  //this.enrollWithPassword();
                 }
               });
             }
 
-            this.loader.dismiss();
+
+          }).catch(reason => {
+            this.loader.dismissAll();
           });
         }
 
-        this.loader.dismiss();
-
+      }).catch(reason => {
+        this.loader.dismissAll();
       });
     }
 
@@ -141,26 +146,28 @@ export class MpeekCoursePage {
     //we are in mark requiredpassword.
     if(this.requirePassword && this.instanceid) {
 
-      this.showPrompt();
+      //this.showPrompt();
 
-      if(this.enrolKey.length > 0){
+      if(this.enrolKey && this.enrolKey.length > 0){
         this.presentLoading();
         this.sendEnrollRequest(this.course.id, this.enrolKey, this.instanceid).then((data: ImSelfEnrolUser) => {
 
           if(data.status){
 
             console.log("enrolled with password!!!");
-
-            this.navCtrl.popTo(MhomePage);
-            this.navCtrl.push(McourseListPage, { param1: this.course.id});
+            this.loader.dismissAll();
+            this.viewCourse();
 
           }else{
             //if error
+            this.loader.dismissAll();
             this.showAlert();
           }
 
-          this.loader.dismiss();
 
+        }).catch(reason => {
+
+          this.loader.dismissAll();
         });
       }
     }
@@ -186,14 +193,14 @@ export class MpeekCoursePage {
         {
           text: 'Cancel',
           handler: data => {
-            console.log('Cancel clicked');
+            this.loader.dismissAll();
           }
         },
         {
           text: 'Enrol',
           handler: data => {
-            this.enrolKey = data.toString().trim();
-            console.log('Enrol clicked');
+            this.enrolKey = data.hasOwnProperty('key') ? data.key : "";
+            this.enrollWithPassword();
           }
         }
       ]
@@ -212,10 +219,20 @@ export class MpeekCoursePage {
 
   presentLoading(){
     this.loader = this.loadingCtrl.create({
-      content: "Searching..."
+      content: "Processing..."
     });
     this.loader.present();
   }
 
+  viewCourse(){
+
+    this.navCtrl.popTo(MhomePage);
+    this.navCtrl.push(McourseListPage, { param1: this.course.id});
+
+  }
+
+  isArray(what) {
+    return Object.prototype.toString.call(what) === '[object Array]';
+  }
 
 }
