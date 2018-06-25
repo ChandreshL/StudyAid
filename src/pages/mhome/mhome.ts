@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {MsearchPage} from "../msearch/msearch";
-import {McourseListPage} from "../mcourse-list/mcourse-list";
 import {MdisplayCoursesPage} from "../mdisplay-courses/mdisplay-courses";
-
+import { PopoverController } from 'ionic-angular';
+import {MhomePopMenuComponent} from "../../components/mhome-pop-menu/mhome-pop-menu";
 
 @IonicPage()
 @Component({
@@ -12,7 +12,11 @@ import {MdisplayCoursesPage} from "../mdisplay-courses/mdisplay-courses";
 })
 export class MhomePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public popoverCtrl: PopoverController
+  ) {
 
   }
 
@@ -20,8 +24,21 @@ export class MhomePage {
     this.navCtrl.push(MsearchPage);
   }
 
-  displayCourses(){
-    this.navCtrl.push(MdisplayCoursesPage);
+  refreshCourse(){
+
+  }
+
+  displayCourses(event){
+    //this.navCtrl.push(MdisplayCoursesPage);
+    //dispaly courses here..
+    console.log("card clicked");
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(MhomePopMenuComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
 }

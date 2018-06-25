@@ -10,23 +10,55 @@
     <ion-title>Moodle</ion-title>
   </ion-navbar>
 
+  <ion-toolbar>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="searchCourse()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="refreshCourse()">
+        <ion-icon name="refresh-circle"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
 </ion-header>
 
 
 <ion-content padding>
 
-  <ion-list>
+  <ion-list >
 
-    <button ion-item (click)="searchCourse()">
-      <ion-icon name="search" item-start></ion-icon>
-      Search Courses
-    </button>
+      <ion-card (click)="displayCourses($event)">
+        <ion-card-header>
+          Nine Inch Nails Live
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            The most popular industrial group ever, and largely
+            responsible for bringing the music to a mass audience.
+          </p>
+        </ion-card-content>
+      </ion-card>
 
-    <button ion-item (click)="displayCourses()">
-      <ion-icon name="home" item-start></ion-icon>
-        My Courses
-    </button>
+
+    <ion-card (click)="displayCourses($event)">
+      <ion-card-header>
+        Nine Inch Nails Live
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          The most popular industrial group ever, and largely
+          responsible for bringing the music to a mass audience.
+        </p>
+      </ion-card-content>
+    </ion-card>
 
   </ion-list>
 
 </ion-content>
+

@@ -3,7 +3,6 @@ import {IonicPage, NavController, NavParams, AlertController, LoadingController}
 import {IContacts, ImCourseEnrolmentMethods, ImEnrolledCourse, mCourse} from "../../providers/database/database";
 import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
 import {MhomePage} from "../mhome/mhome";
-import {McourseContentPage} from "../mcourse-content/mcourse-content";
 import {McourseListPage} from "../mcourse-list/mcourse-list";
 
 
