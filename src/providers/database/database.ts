@@ -97,14 +97,14 @@ export interface ImCourseList {
 }
 
 export interface ImEnrolledCourse {
-  id: number,
+  id: number, //id of course
   shortname: string,
   fullname: string,
   enrolledusercount: number,
-  idnumber: string,
-  visible: number,
+  idnumber: string,   //id number of course
+  visible: number,    //1 means visible, 0 means hidden course
   summary: string,
-  summaryformat: number,
+  summaryformat: number,   //Optional summary format (1 = HTML, 0 = MOODLE, 2 = PLAIN or 4 = MARKDOWN)
   format: string,
   showgrades: boolean,
   lang: string,
@@ -113,6 +113,16 @@ export interface ImEnrolledCourse {
   progress: number,
   startdate: number,
   enddate: number
+}
+
+
+export interface ImCourseEnrolmentMethods {
+  id: number,   //id of course enrolment instance
+  courseid: number,   //id of course
+  type: string,   //type of enrolment plugin
+  name: string,   //name of enrolment plugin
+  status: string,   //status of enrolment plugin
+  wsfunction: string,   // Optional webservice function to get more information
 }
 
 

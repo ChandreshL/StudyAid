@@ -141,7 +141,67 @@ export class MoodleApiProvider {
 
   }
 
-  enrollInCourse(password){
+  getCourseEnrolmentMethods(courseid){
+
+    let url = this.siteUrl + "/" + this.apiUrl;
+
+    const body = new HttpParams()
+      .set("wstoken", this.token )
+      .set("moodlewsrestformat", "json")
+      .set("wsfunction", "core_enrol_get_course_enrolment_methods")
+      .set("courseid", courseid);
+
+
+    return new Promise(resolve => {
+
+      this.sendPostRequest(url,body.toString()).subscribe(data => {
+        if(this.isArray(data)){
+          resolve(data);
+        }else{
+          console.log(data);
+          resolve(false);
+        }
+      }, error =>{
+        console.log(error);
+        resolve(false);
+      });
+
+    });
+
+  }
+
+  isArray(what) {
+    return Object.prototype.toString.call(what) === '[object Array]';
+  }
+
+  enrollInCourse(courseid, password, instanceid){
+
+    let url = this.siteUrl + "/" + this.apiUrl;
+
+    const body = new HttpParams()
+      .set("wstoken", this.token )
+      .set("moodlewsrestformat", "json")
+      .set("wsfunction", "enrol_self_enrol_user")
+      .set("courseid", courseid)
+      .set("password", password)
+      .set("instanceid", instanceid);
+
+
+    return new Promise(resolve => {
+
+      this.sendPostRequest(url,body.toString()).subscribe(data => {
+        if(data.hasOwnProperty('status')){
+          resolve(data);
+        }else{
+          console.log(data);
+          resolve(false);
+        }
+      }, error =>{
+        console.log(error);
+        resolve(false);
+      });
+
+    });
 
   }
 
@@ -161,13 +221,14 @@ export class MoodleApiProvider {
 
         //Save in database
         if(data.length > 0){
-          await this.appdb.transaction('rw', this.appdb.enrolledCourses, () =>{
-            data.forEach(async d => {
-               await this.appdb.enrolledCourses.add(d);
-            })
-          });
 
-          resolve(true);
+          // await this.appdb.transaction('rw', this.appdb.enrolledCourses, () =>{
+          //   data.forEach(async d => {
+          //      await this.appdb.enrolledCourses.add(d);
+          //   })
+          // });
+
+          resolve(data);
         }else{
           resolve(false);
         }

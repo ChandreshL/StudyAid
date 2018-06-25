@@ -16,6 +16,7 @@
 <ion-content padding>
 
   <ion-list>
+
     <ion-item>
       {{ course.fullname }}
     </ion-item>
@@ -23,11 +24,10 @@
       {{ getTeachersName(course.contacts) }}
     </ion-item>
     <ion-item>
-      <button ion-button  block color="secondary" (click)="enrollButton()">
+      <button *ngIf="btnShow" ion-button  block color="secondary" (click)="enrollButton()">
         Enroll
       </button>
     </ion-item>
-
 
   </ion-list>
 
