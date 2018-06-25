@@ -21,6 +21,7 @@ import {SlistPage} from "../pages/slist/slist";
 import {ScalenderPage} from "../pages/scalender/scalender";
 import {DatabaseProvider} from "../providers/database/database";
 import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
+import {MpeekCoursePage} from "../pages/mpeek-course/mpeek-course";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
     ShomePage,
     SlistPage,
     ScalenderPage,
-    LhomePage
+    LhomePage,
+    MpeekCoursePage
 
   ],
   imports: [
@@ -59,7 +61,8 @@ import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
     ShomePage,
     SlistPage,
     ScalenderPage,
-    LhomePage
+    LhomePage,
+    MpeekCoursePage
   ],
   providers: [
     StatusBar,

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {DatabaseProvider, User, Site, IUser, ISite} from "../database/database";
+import {DatabaseProvider, User, Site, IUser, ISite, ImEnrolledCourse} from "../database/database";
 
 /*
   Generated class for the MoodleApiProvider provider.
@@ -31,8 +31,13 @@ export class MoodleApiProvider {
     if (count > 0) {
 
       await this.appdb.user.toCollection().first().then(data =>{
-        this.token = data.token;
+        if(data) this.token = data.token;
       });
+
+      await this.appdb.site.toCollection().first().then(data => {
+        if(data){ this.userId = data.userid; }
+      });
+
     }
 
     return (this.token && this.token.length > 0)
@@ -62,6 +67,7 @@ export class MoodleApiProvider {
 
           this.getSiteInfo();
 
+
           Loggedin = true;
           resolve(true);
         }else{
@@ -86,7 +92,7 @@ export class MoodleApiProvider {
   }
 
   getSiteInfo(){
-    let url = this.siteUrl + "/" + this.authUrl;
+    let url = this.siteUrl + "/" + this.apiUrl;
 
     const body = new HttpParams()
       .set("wstoken", this.token)
@@ -96,6 +102,7 @@ export class MoodleApiProvider {
     this.sendPostRequest(url,body.toString()).subscribe((data: ISite) => {
 
       this.userId = data.userid;
+
       this.appdb.saveToDatabase('site', data);
 
     }, error => {
@@ -103,7 +110,6 @@ export class MoodleApiProvider {
     });
 
   }
-
 
   searchCourse(searchStr){
 
@@ -139,7 +145,38 @@ export class MoodleApiProvider {
 
   }
 
-  getEnrolledCourses(userId){
+  async getEnrolledCourses(){
+
+    let url = this.siteUrl + "/" + this.apiUrl;
+
+    const body = new HttpParams()
+      .set("wstoken", this.token )
+      .set("moodlewsrestformat", "json")
+      .set("wsfunction", "core_enrol_get_users_courses")
+      .set("userid", this.userId.toString());
+
+    return await new Promise(resolve => {
+
+      this.sendPostRequest(url,body.toString()).subscribe(async (data: Array<ImEnrolledCourse>)=> {
+
+        //Save in database
+        if(data.length > 0){
+          await this.appdb.transaction('rw', this.appdb.enrolledCourses, () =>{
+            data.forEach(async d => {
+               await this.appdb.enrolledCourses.add(d);
+            })
+          });
+
+          resolve(true);
+        }else{
+          resolve(false);
+        }
+      }, error =>{
+        console.log(error);
+        resolve(false);
+      });
+
+    });
 
   }
 

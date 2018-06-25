@@ -9,13 +9,15 @@ export class DatabaseProvider extends  Dexie{
 
   user: Dexie.Table<IUser, string>; // string = type of the primkey
   site: Dexie.Table<ISite, string>; // number = type of the primkey
+  enrolledCourses: Dexie.Table<ImEnrolledCourse, number>;
 
   constructor() {
     super("StudyAidDb");
 
     this.version(1).stores({
         user: "token, privatetoken",
-        site: "sitename, username, firstname, lastname, fullname, lang, userid"
+        site: "sitename, username, firstname, lastname, fullname, lang, userid",
+        enrolledCourses: "id, shortname, fullname, startdate, enddater"
     });
   }
 
@@ -30,6 +32,8 @@ export class DatabaseProvider extends  Dexie{
       case  "site":
         dataObj = Site.fromJSON(data);
         break;
+      case "enrolledCourses":
+        dataObj = mEnrolledCourse.fromJSON(data);
       default:
         dataObj = null;
     }
@@ -40,8 +44,6 @@ export class DatabaseProvider extends  Dexie{
 
 
 }
-
-
 
 export interface IContacts {
   id: number,
@@ -93,6 +95,26 @@ export interface ImCourseList {
     courses: Array<mCourse>,
     warnings: Array<any>
 }
+
+export interface ImEnrolledCourse {
+  id: number,
+  shortname: string,
+  fullname: string,
+  enrolledusercount: number,
+  idnumber: string,
+  visible: number,
+  summary: string,
+  summaryformat: number,
+  format: string,
+  showgrades: boolean,
+  lang: string,
+  enablecompletion: boolean,
+  category: number,
+  progress: number,
+  startdate: number,
+  enddate: number
+}
+
 
 export class User implements IUser{
 
@@ -197,6 +219,53 @@ export class mCourse implements ImCourse{
       null,
       null,
       data.hasOwnProperty('enrollmentmethods') ? data.enrollmentmethods : ""
+    );
+  }
+
+}
+
+export class mEnrolledCourse implements ImEnrolledCourse{
+  constructor(
+    public id: number,
+    public shortname: string,
+    public fullname: string,
+    public enrolledusercount: number,
+    public idnumber: string,
+    public visible: number,
+    public summary: string,
+    public summaryformat: number,
+    public format: string,
+    public showgrades: boolean,
+    public lang: string,
+    public enablecompletion: boolean,
+    public category: number,
+    public progress: number,
+    public startdate: number,
+    public enddate: number
+  ){}
+
+  static fromJSON(data){
+
+    if((typeof data) != "object")
+      data = JSON.parse(data);
+
+    return new mEnrolledCourse(
+      data.hasOwnProperty('id') ? data.id : null,
+      data.hasOwnProperty('shortname') ? data.shortname : null,
+      data.hasOwnProperty('fullname') ? data.fullname : null,
+      data.hasOwnProperty('enrolledusercount') ? data.enrolledusercount : null,
+      data.hasOwnProperty('idnumber') ? data.idnumber : null,
+      data.hasOwnProperty('visible') ? data.visible : null,
+      data.hasOwnProperty('summary') ? data.summary : null,
+      data.hasOwnProperty('summaryformat') ? data.summaryformat : null,
+      data.hasOwnProperty('format') ? data.format : null,
+      data.hasOwnProperty('showgrades') ? data.showgrades : null,
+      data.hasOwnProperty('lang') ? data.lang : null,
+      data.hasOwnProperty('enablecompletion') ? data.enablecompletion : null,
+      data.hasOwnProperty('category') ? data.category : null,
+      data.hasOwnProperty('progress') ? data.progress : null,
+      data.hasOwnProperty('startdate') ? data.startdate : null,
+      data.hasOwnProperty('enddate') ? data.enddate : null
     );
   }
 
