@@ -33,7 +33,7 @@ export class MyApp {
 
       this.pages = [
         {title:'Schedule', component: ShomePage},
-        {title:'Library', component: LhomePage}
+        {title:'Library', component: LhomePage},
       ];
 
       statusBar.styleDefault();

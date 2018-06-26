@@ -17,7 +17,7 @@ export class DatabaseProvider extends  Dexie{
     this.version(1).stores({
         user: "token, privatetoken",
         site: "sitename, username, firstname, lastname, fullname, lang, userid",
-        enrolledCourses: "id, shortname, fullname, startdate, enddater"
+        enrolledCourses: "id, shortname, fullname"
     });
   }
 

@@ -24,6 +24,7 @@ import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
 import {MpeekCoursePage} from "../pages/mpeek-course/mpeek-course";
 import {MhomePopMenuComponent} from "../components/mhome-pop-menu/mhome-pop-menu";
 
+
 @NgModule({
   declarations: [
     MyApp,

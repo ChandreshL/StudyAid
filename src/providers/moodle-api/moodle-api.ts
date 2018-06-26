@@ -1,13 +1,8 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {DatabaseProvider, User, Site, IUser, ISite, ImEnrolledCourse} from "../database/database";
+import {DatabaseProvider, User, Site, IUser, ISite, mEnrolledCourse} from "../database/database";
 
-/*
-  Generated class for the MoodleApiProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class MoodleApiProvider {
 
@@ -21,6 +16,7 @@ export class MoodleApiProvider {
 
     this.appdb.user.mapToClass(User);
     this.appdb.site.mapToClass(Site);
+    this.appdb.enrolledCourses.mapToClass(mEnrolledCourse);
 
   }
 
@@ -213,25 +209,19 @@ export class MoodleApiProvider {
 
     return await new Promise(resolve => {
 
-      this.sendPostRequest(url,body.toString()).subscribe(async (data: Array<ImEnrolledCourse>)=> {
+      this.sendPostRequest(url,body.toString()).subscribe(async (data) => {
 
-        //Save in database
-        if(data.length > 0){
+          //Save in database
+          if(data && this.isArray(data)){
+            resolve(data);
+          }else{
+            resolve(false);
+          }
 
-          // await this.appdb.transaction('rw', this.appdb.enrolledCourses, () =>{
-          //   data.forEach(async d => {
-          //      await this.appdb.enrolledCourses.add(d);
-          //   })
-          // });
-
-          resolve(data);
-        }else{
+        }, error =>{
+          console.log(error);
           resolve(false);
-        }
-      }, error =>{
-        console.log(error);
-        resolve(false);
-      });
+        });
 
     });
 

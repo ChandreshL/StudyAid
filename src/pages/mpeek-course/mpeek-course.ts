@@ -42,7 +42,7 @@ export class MpeekCoursePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController,
+    public loadingCtrl: LoadingController
   ) {
 
     this.course = this.navParams.get('param1');

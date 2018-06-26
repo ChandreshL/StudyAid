@@ -31,32 +31,33 @@
 
 <ion-content padding>
 
-  <ion-list >
+  <h2>Enrolled courses</h2>
 
-      <ion-card (click)="displayCourses($event)">
-        <ion-card-header>
-          Nine Inch Nails Live
-        </ion-card-header>
-        <ion-card-content>
-          <p>
-            The most popular industrial group ever, and largely
-            responsible for bringing the music to a mass audience.
-          </p>
-        </ion-card-content>
-      </ion-card>
+  <ion-list>
 
-
-    <ion-card (click)="displayCourses($event)">
+    <ion-card *ngFor="let item of coursesList" (click)="openCourse($event)">
       <ion-card-header>
-        Nine Inch Nails Live
+        {{ item.fullname }}
       </ion-card-header>
       <ion-card-content>
         <p>
-          The most popular industrial group ever, and largely
-          responsible for bringing the music to a mass audience.
+          {{ item.shortname }}
         </p>
       </ion-card-content>
     </ion-card>
+
+    <!--<ion-item *ngfor="let item of coursesList">-->
+      <!--<ion-card >-->
+        <!--<ion-card-header>-->
+          <!--{{ item.shortname }}-->
+        <!--</ion-card-header>-->
+        <!--<ion-card-content>-->
+          <!--<p>-->
+            <!--{{ item.fullname }}-->
+          <!--</p>-->
+        <!--</ion-card-content>-->
+      <!--</ion-card>-->
+    <!--</ion-item>-->
 
   </ion-list>
 
