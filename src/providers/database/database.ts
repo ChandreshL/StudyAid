@@ -10,6 +10,7 @@ export class DatabaseProvider extends  Dexie{
   user: Dexie.Table<IUser, string>; // string = type of the primkey
   site: Dexie.Table<ISite, string>; // number = type of the primkey
   enrolledCourses: Dexie.Table<ImEnrolledCourse, number>;
+  courseSectionContent: Dexie.Table<ImCourseSectionContent, number>;
 
   constructor() {
     super("StudyAidDb");
@@ -17,11 +18,12 @@ export class DatabaseProvider extends  Dexie{
     this.version(1).stores({
         user: "token, privatetoken",
         site: "sitename, username, firstname, lastname, fullname, lang, userid",
-        enrolledCourses: "id, shortname, fullname"
+        enrolledCourses: "id, shortname, fullname",
+        courseSectionContent: "id, courseId"
     });
   }
 
-  saveToDatabase(table:string,data:any){
+  saveToDatabase(table:string,data:any, id?: number){
 
     //convert data object to table data.
     let dataObj;
@@ -34,6 +36,13 @@ export class DatabaseProvider extends  Dexie{
         break;
       case "enrolledCourses":
         dataObj = mEnrolledCourse.fromJSON(data);
+        break;
+      case "courseSectionContent":
+        if(id) {
+          dataObj = null;
+        }else {
+          dataObj = mCourseSectionContent.fromJSONWithCourse(id, data);
+        }
         break;
       default:
         dataObj = null;
@@ -126,6 +135,20 @@ export interface ImCourseEnrolmentMethods {
   wsfunction: string,   // Optional webservice function to get more information
 }
 
+
+export interface ImCourseSectionContent {
+
+  courseId: number,
+  id:  number,
+  name:  string,
+  visible:  number,
+  summary:  string,
+  summaryformat:  number,
+  section:  number,
+  hiddenbynumsections:  number,
+  uservisible:  boolean
+
+}
 
 export class User implements IUser{
 
@@ -279,5 +302,63 @@ export class mEnrolledCourse implements ImEnrolledCourse{
       data.hasOwnProperty('enddate') ? data.enddate : null
     );
   }
+
+}
+
+
+export class mCourseSectionContent {
+
+  constructor(
+    public courseId: number,
+    public id:  number,
+    public name:  string,
+    public visible:  number,
+    public summary:  string,
+    public summaryformat:  number,
+    public section:  number,
+    public hiddenbynumsections:  number,
+    public uservisible:  boolean
+  ){
+
+  }
+
+  static fromJSON(data){
+
+    if((typeof data) != "object")
+      data = JSON.parse(data);
+
+    return new mCourseSectionContent(
+      data.hasOwnProperty('courseId') ? data.courseId : "",
+      data.hasOwnProperty('id') ? data.id : "",
+      data.hasOwnProperty('name') ? data.name : "",
+      data.hasOwnProperty('visible') ? data.visible : "",
+      data.hasOwnProperty('summary') ? data.summary : "",
+      data.hasOwnProperty('summaryformat') ? data.summaryformat : null,
+      data.hasOwnProperty('section') ? data.section : "",
+      data.hasOwnProperty('hiddenbynumsections') ? data.hiddenbynumsections : "",
+      data.hasOwnProperty('uservisible') ? data.uservisible : ""
+    );
+  }
+
+  static fromJSONWithCourse(courseid, data){
+
+    if(courseid) return;
+
+    if((typeof data) != "object")
+      data = JSON.parse(data);
+
+    return new mCourseSectionContent(
+      courseid,
+      data.hasOwnProperty('id') ? data.id : "",
+      data.hasOwnProperty('name') ? data.name : "",
+      data.hasOwnProperty('visible') ? data.visible : "",
+      data.hasOwnProperty('summary') ? data.summary : "",
+      data.hasOwnProperty('summaryformat') ? data.summaryformat : null,
+      data.hasOwnProperty('section') ? data.section : "",
+      data.hasOwnProperty('hiddenbynumsections') ? data.hiddenbynumsections : "",
+      data.hasOwnProperty('uservisible') ? data.uservisible : ""
+    );
+  }
+
 
 }

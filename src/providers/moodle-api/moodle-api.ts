@@ -227,7 +227,32 @@ export class MoodleApiProvider {
 
   }
 
-  getCourseContent(courseId){
+  async getCourseContent(courseId){
+
+    let url = this.siteUrl + "/" + this.apiUrl;
+
+    const body = new HttpParams()
+      .set("wstoken", this.token )
+      .set("moodlewsrestformat", "json")
+      .set("wsfunction", "core_course_get_contents")
+      .set("courseid", courseId);
+
+    return await new Promise(resolve => {
+
+      this.sendPostRequest(url,body.toString()).subscribe(async (data) => {
+
+        if(data && this.isArray(data)){
+          resolve(data);
+        }else{
+          resolve(false);
+        }
+
+      }, error =>{
+        console.log(error);
+        resolve(false);
+      });
+
+    });
 
   }
 

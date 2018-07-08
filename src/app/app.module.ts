@@ -12,8 +12,6 @@ import {MhomePage} from "../pages/mhome/mhome";
 import {MloginPage} from "../pages/mlogin/mlogin";
 import {MsearchPage} from "../pages/msearch/msearch";
 import {MenrollPage} from "../pages/menroll/menroll";
-import {MdisplayCoursesPage} from "../pages/mdisplay-courses/mdisplay-courses";
-import {McourseListPage} from "../pages/mcourse-list/mcourse-list";
 import {McourseContentPage} from "../pages/mcourse-content/mcourse-content";
 import {ShomePage} from "../pages/shome/shome";
 import {LhomePage} from "../pages/lhome/lhome";
@@ -33,8 +31,6 @@ import {MhomePopMenuComponent} from "../components/mhome-pop-menu/mhome-pop-menu
     MloginPage,
     MsearchPage,
     MenrollPage,
-    MdisplayCoursesPage,
-    McourseListPage,
     McourseContentPage,
     ShomePage,
     SlistPage,
@@ -58,8 +54,6 @@ import {MhomePopMenuComponent} from "../components/mhome-pop-menu/mhome-pop-menu
     MloginPage,
     MsearchPage,
     MenrollPage,
-    MdisplayCoursesPage,
-    McourseListPage,
     McourseContentPage,
     ShomePage,
     SlistPage,

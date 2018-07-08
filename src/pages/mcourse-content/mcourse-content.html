@@ -6,13 +6,24 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>mcourse-content</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>{{ courseName }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
+
 <ion-content padding>
+
+  <ion-card *ngFor="let item of courseSections;">
+    <ion-card-header>
+      {{ item.name }}
+    </ion-card-header>
+    <ion-card-content >
+      <div [innerHtml]="item.summary"></div>
+    </ion-card-content>
+  </ion-card>
+
 
 </ion-content>

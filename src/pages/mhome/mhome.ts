@@ -71,10 +71,11 @@ export class MhomePage {
 
   openCourse(index){
 
-    let courseid = this.coursesList[index].id;
+    let courseid: number = this.coursesList[index].id;
+    let courseName: string = this.coursesList[index].shortname;
 
     //open the card with courseid
-    this.navCtrl.push(McourseContentPage, { courseid: courseid});
+    this.navCtrl.push(McourseContentPage, { courseid: courseid, courseName: courseName});
 
 
   }
