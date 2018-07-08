@@ -10,19 +10,47 @@
     <ion-title>Moodle</ion-title>
   </ion-navbar>
 
-  <ion-toolbar>
+  <ion-toolbar color="secondary">
+
     <ion-buttons end>
-      <button ion-button icon-only (click)="searchCourse()">
-        <ion-icon name="search"></ion-icon>
+
+      <button ion-button (click)="searchCourse()">
+        <ion-col>
+          <ion-row justify-content-center>
+            <ion-icon name="search" ></ion-icon>
+          </ion-row>
+          <ion-row>
+            <span class="toolbar-btn">search</span>
+          </ion-row>
+        </ion-col>
       </button>
 
-      <button ion-button icon-only (click)="refreshCourse()">
-        <ion-icon name="refresh-circle"></ion-icon>
+      <button ion-button>
+        <ion-col>
+          <ion-row justify-content-center>
+            <ion-icon name="chatbubbles" ></ion-icon>
+          </ion-row>
+          <ion-row>
+            <span class="toolbar-btn">messages</span>
+          </ion-row>
+        </ion-col>
+      </button>
+
+      <button ion-button (click)="refreshCourse()">
+        <ion-col>
+          <ion-row justify-content-center>
+            <ion-icon name="refresh-circle" ></ion-icon>
+          </ion-row>
+          <ion-row>
+            <span class="toolbar-btn">refresh</span>
+          </ion-row>
+        </ion-col>
       </button>
 
       <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
+
     </ion-buttons>
   </ion-toolbar>
 
@@ -31,11 +59,11 @@
 
 <ion-content padding>
 
-  <h2>Enrolled courses</h2>
+  <h4>Enrolled courses</h4>
 
   <ion-list>
 
-    <ion-card *ngFor="let item of coursesList" (click)="openCourse($event)">
+    <ion-card *ngFor="let item of coursesList; let i = index;" (click)="openCourse(i)">
       <ion-card-header>
         {{ item.fullname }}
       </ion-card-header>

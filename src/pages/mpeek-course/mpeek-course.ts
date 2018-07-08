@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
 import {IContacts, ImCourseEnrolmentMethods, ImEnrolledCourse, mCourse} from "../../providers/database/database";
 import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
-import {MhomePage} from "../mhome/mhome";
-import {McourseListPage} from "../mcourse-list/mcourse-list";
+import { Storage } from "@ionic/storage";
 
 
 interface ImSelfEnrolUser {
@@ -42,7 +41,8 @@ export class MpeekCoursePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private storage: Storage
   ) {
 
     this.course = this.navParams.get('param1');
@@ -112,7 +112,7 @@ export class MpeekCoursePage {
               console.log("enrolled without password");
 
               this.loader.dismissAll();
-              this.viewCourse();
+              this.popToHome();
 
             }else {
 
@@ -155,7 +155,7 @@ export class MpeekCoursePage {
 
             console.log("enrolled with password!!!");
             this.loader.dismissAll();
-            this.viewCourse();
+            this.popToHome();
 
           }else{
             //if error
@@ -223,10 +223,14 @@ export class MpeekCoursePage {
     this.loader.present();
   }
 
-  viewCourse(){
+  popToHome(){
 
-    this.navCtrl.popTo(MhomePage);
-    this.navCtrl.push(McourseListPage, { param1: this.course.id});
+    this.storage.set('enrolled','yes');
+
+    //Pop to two pages to Mhomepage
+    this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length()-3));
+
+    //this.navCtrl.push(McourseListPage, { param1: this.course.id});
 
   }
 

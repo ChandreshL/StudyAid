@@ -34,6 +34,7 @@ export class DatabaseProvider extends  Dexie{
         break;
       case "enrolledCourses":
         dataObj = mEnrolledCourse.fromJSON(data);
+        break;
       default:
         dataObj = null;
     }

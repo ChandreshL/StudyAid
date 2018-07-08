@@ -5,6 +5,8 @@ import { PopoverController } from 'ionic-angular';
 import {MhomePopMenuComponent} from "../../components/mhome-pop-menu/mhome-pop-menu";
 import {DatabaseProvider, ImEnrolledCourse } from "../../providers/database/database";
 import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
+import { Storage } from '@ionic/storage';
+import {McourseContentPage} from "../mcourse-content/mcourse-content";
 
 @IonicPage()
 @Component({
@@ -22,14 +24,33 @@ export class MhomePage {
     public popoverCtrl: PopoverController,
     private appdb: DatabaseProvider,
     private moodleApi: MoodleApiProvider,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private storage: Storage
   ) {
 
   }
 
   ionViewDidEnter() {
 
-    this.getCoursesFromDb();
+    this.storage.get('enrolled').then((val)=>{
+
+      if(val == 'yes'){
+        this.getCoursesFromAPI();
+      }else{
+        this.getCoursesFromDb();
+      }
+
+      this.storage.remove('enrolled');
+
+    }).catch( (reason) => {
+
+      console.log("storage:enrolled with error");
+      this.getCoursesFromDb();
+      this.storage.remove('enrolled');
+    });
+
+
+    //this.getCoursesFromDb();
 
   }
 
@@ -48,13 +69,18 @@ export class MhomePage {
     this.getCoursesFromAPI();
   }
 
-  openCourse(event){
-    //this.navCtrl.push(MdisplayCoursesPage);
-    //dispaly courses here..
-    console.log("card clicked");
+  openCourse(index){
+
+    let courseid = this.coursesList[index].id;
+
+    //open the card with courseid
+    this.navCtrl.push(McourseContentPage, { courseid: courseid});
+
+
   }
 
   getCoursesFromAPI(){
+    this.loader.dismissAll();
     this.presentLoading();
 
     console.log("getting from api");
@@ -62,6 +88,7 @@ export class MhomePage {
     this.moodleApi.getEnrolledCourses().then((data: Array<ImEnrolledCourse>) => {
 
       if(data){
+
         this.coursesList = data;
         this.saveCoursesToDb(data);
       }
@@ -70,6 +97,7 @@ export class MhomePage {
 
     }).catch(reason => {
 
+      console.log("error getting from api");
       this.loader.dismissAll();
     });
   }
@@ -82,7 +110,7 @@ export class MhomePage {
 
         if(data && data.length == 0){
 
-          this.loader.dismissAll();
+          console.log("no data in database.");
           this.getCoursesFromAPI();
 
         } else {
@@ -99,9 +127,13 @@ export class MhomePage {
 
       this.appdb.transaction('rw', this.appdb.enrolledCourses, async() => {
 
-         this.appdb.enrolledCourses.bulkAdd(data)
-           .then(value => {})
-           .catch(reason => {});
+        this.appdb.enrolledCourses.clear().then( result => {
+
+          this.appdb.enrolledCourses.bulkAdd(data)
+            .then(value => {})
+            .catch(reason => {});
+
+        });
 
       }).catch(e => {
         console.log(e.stack || e);

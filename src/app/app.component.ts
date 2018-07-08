@@ -4,12 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { MhomePage } from "../pages/mhome/mhome";
-import { ShomePage } from "../pages/shome/shome";
-import { LhomePage } from "../pages/lhome/lhome";
-import { MloginPage } from "../pages/mlogin/mlogin";
-import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
-
 
 @Component({
   templateUrl: 'app.html'
@@ -22,7 +16,6 @@ export class MyApp {
   //loader: any;
 
   constructor(
-      private moodleApi: MoodleApiProvider,
       platform: Platform,
       statusBar: StatusBar,
       splashScreen: SplashScreen
@@ -32,30 +25,12 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
 
       this.pages = [
-        {title:'Schedule', component: ShomePage},
-        {title:'Library', component: LhomePage},
+        // {title:'Library', component: LhomePage}
       ];
 
       statusBar.styleDefault();
       splashScreen.hide();
     });
-  }
-
-  openMoodle(){
-
-    //this.presentLoading();
-
-    this.moodleApi.isLoggedIn().then(value => {
-
-      if(value){
-        this.nav.push(MhomePage);
-      }else{
-        this.nav.push(MloginPage);
-      }
-    });
-
-    //this.loader.dismiss();
-
   }
 
   openPage(page){

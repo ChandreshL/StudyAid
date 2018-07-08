@@ -50,6 +50,8 @@ export class MloginPage {
 
       }
 
+    }).catch(reason =>{
+      this.loader.dismiss();
     });
 
     //this.loader.dismiss();

@@ -14,8 +14,9 @@
     <ion-searchbar placeholder="Search courses"
                    [(ngModel)]="queryText"
                    (ionInput)="fetchCourses($event)"
-                   [debounce]="600"
-    ></ion-searchbar>
+                   [debounce]="600">
+    </ion-searchbar>
+
   </ion-toolbar>
 
 </ion-header>

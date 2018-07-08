@@ -30,6 +30,8 @@ export class MsearchPage {
 
     let queryTextLower = this.queryText.toLowerCase();
 
+    if(queryTextLower.length == 0) return;
+
     let resultArr: Array<mCourse> = [];
 
     this.presentLoading();

@@ -18,8 +18,5 @@ export class MenrollPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MenrollPage');
-  }
 
 }

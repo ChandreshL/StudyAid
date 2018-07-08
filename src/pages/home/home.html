@@ -9,6 +9,45 @@
       Study Aid
     </ion-title>
   </ion-navbar>
+
+  <ion-toolbar color="secondary">
+    <ion-buttons end>
+      <button ion-button (click)="openMoodle()">
+        <ion-col>
+          <ion-row justify-content-center>
+          <ion-icon name="school"></ion-icon>
+          </ion-row>
+          <ion-row>
+            <span style="font-size: 1.0rem; padding-top: 5px;">moodle</span>
+          </ion-row>
+        </ion-col>
+      </button>
+
+      <button ion-button (click)="openSchedule()">
+        <ion-col>
+          <ion-row justify-content-center>
+            <ion-icon name="calendar" ></ion-icon>
+          </ion-row>
+          <ion-row>
+            <span style="font-size: 1.0rem; padding-top: 5px;">schedule</span>
+          </ion-row>
+        </ion-col>
+      </button>
+
+      <button ion-button (click)="openLibrary()">
+        <ion-col>
+          <ion-row justify-content-center>
+            <ion-icon name="book" ></ion-icon>
+          </ion-row>
+          <ion-row>
+            <span style="font-size: 1.0rem; padding-top: 5px;">Library</span>
+          </ion-row>
+        </ion-col>
+      </button>
+
+    </ion-buttons>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content padding>
