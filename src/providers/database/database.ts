@@ -125,7 +125,6 @@ export interface ImEnrolledCourse {
   enddate: number
 }
 
-
 export interface ImCourseEnrolmentMethods {
   id: number,   //id of course enrolment instance
   courseid: number,   //id of course
@@ -134,7 +133,6 @@ export interface ImCourseEnrolmentMethods {
   status: string,   //status of enrolment plugin
   wsfunction: string,   // Optional webservice function to get more information
 }
-
 
 export interface ImCourseSectionContent {
 
@@ -149,6 +147,8 @@ export interface ImCourseSectionContent {
   uservisible:  boolean
 
 }
+
+
 
 export class User implements IUser{
 
@@ -304,7 +304,6 @@ export class mEnrolledCourse implements ImEnrolledCourse{
   }
 
 }
-
 
 export class mCourseSectionContent {
 
