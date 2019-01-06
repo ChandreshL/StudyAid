@@ -94,7 +94,14 @@ export class McourseContentPage {
 
         this.courseSections = data;
 
-        this.saveCourseContentToDb(data);
+        //Add courseid into the data
+        //this inside foreach referes to tempThis
+        let tempThis = this;
+        this.courseSections.forEach((d,tempThis) => {
+          d.courseId = this.courseid;
+        });
+
+        this.saveCourseContentToDb();
       }
 
       this.loader.dismissAll();
@@ -107,22 +114,17 @@ export class McourseContentPage {
 
   }
 
-  saveCourseContentToDb(data: Array<ImCourseSectionContent>){
+  saveCourseContentToDb(){
 
     this.appdb.transaction('rw', this.appdb.courseSectionContent, async() => {
 
-      await data.forEach(d => {
-        d.courseId = this.courseid;
-      });
-
-      this.appdb.courseSectionContent.bulkAdd(data)
+      this.appdb.courseSectionContent.bulkAdd(this.courseSections)
         .then(value => {})
         .catch(reason => {});
 
     }).catch(e => {
       console.log(e.stack || e);
     });
-
 
   }
 

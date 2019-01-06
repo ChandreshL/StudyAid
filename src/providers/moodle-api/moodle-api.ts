@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {DatabaseProvider, User, Site, IUser, ISite, mEnrolledCourse} from "../database/database";
+import { DatabaseProvider, IUser, ISite } from "../database/database";
 
 
 @Injectable()
@@ -14,11 +14,15 @@ export class MoodleApiProvider {
 
   constructor(public http: HttpClient, private appdb: DatabaseProvider) {
 
-    this.appdb.user.mapToClass(User);
-    this.appdb.site.mapToClass(Site);
-    this.appdb.enrolledCourses.mapToClass(mEnrolledCourse);
+    // this.appdb.user.mapToClass(User);
+    // this.appdb.site.mapToClass(Site);
+    // this.appdb.enrolledCourses.mapToClass(mEnrolledCourse);
 
   }
+
+/*
+* Login Methods
+*/
 
   async isLoggedIn(){
 
@@ -63,7 +67,6 @@ export class MoodleApiProvider {
 
           this.getSiteInfo();
 
-
           Loggedin = true;
           resolve(true);
         }else{
@@ -71,7 +74,7 @@ export class MoodleApiProvider {
           resolve(false);
         }
 
-        console.log("in await");
+        //console.log("in await");
 
       }, error =>{
         console.log(error);
@@ -81,11 +84,16 @@ export class MoodleApiProvider {
 
     });
 
-    console.log("outside await");
+    //console.log("outside await");
 
     return Loggedin;
 
   }
+
+
+/*
+* get user id, which is used to get enrolled courses
+*/
 
   getSiteInfo(){
     let url = this.siteUrl + "/" + this.apiUrl;
@@ -106,6 +114,11 @@ export class MoodleApiProvider {
     });
 
   }
+
+
+/*
+* Search and enroll into course.
+*/
 
   searchCourse(searchStr){
 
@@ -197,6 +210,12 @@ export class MoodleApiProvider {
 
   }
 
+
+
+/*
+* Get enrolled courses
+*/
+
   async getEnrolledCourses(){
 
     let url = this.siteUrl + "/" + this.apiUrl;
@@ -227,6 +246,12 @@ export class MoodleApiProvider {
 
   }
 
+
+/*
+* Get Content of courses
+* Content is in sections.
+*/
+
   async getCourseContent(courseId){
 
     let url = this.siteUrl + "/" + this.apiUrl;
@@ -256,6 +281,10 @@ export class MoodleApiProvider {
 
   }
 
+
+/*
+* Send http request
+*/
 
   sendPostRequest(url:string, body:string){
 

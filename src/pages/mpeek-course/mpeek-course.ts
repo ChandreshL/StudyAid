@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
-import {IContacts, ImCourseEnrolmentMethods, ImEnrolledCourse, mCourse} from "../../providers/database/database";
+import {IContacts, ImCourseEnrolmentMethods, ImEnrolledCourse, ImCourse} from "../../providers/database/database";
 import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
 import { Storage } from "@ionic/storage";
 
@@ -29,7 +29,7 @@ interface ImEnrolWarning {
 })
 export class MpeekCoursePage {
 
-  course: mCourse;
+  course: ImCourse;
   btnShow: boolean;
   enrolKey: string;
   instanceid: number;
@@ -37,9 +37,9 @@ export class MpeekCoursePage {
   loader: any;
 
   constructor(
-    private moodleApi: MoodleApiProvider,
     public navCtrl: NavController,
     public navParams: NavParams,
+    private moodleApi: MoodleApiProvider,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     private storage: Storage
@@ -225,6 +225,12 @@ export class MpeekCoursePage {
 
   popToHome(){
 
+
+  /**
+   * enrolled is a temporary variable in storage
+   * to auto refresh the enrolled courses after enrolling in the course.
+   * It is removed in mhome.ts
+   */
     this.storage.set('enrolled','yes');
 
     //Pop to two pages to Mhomepage

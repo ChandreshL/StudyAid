@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {AlertController, IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
-import {ImCourseList, mCourse} from "../../providers/database/database";
+import {ImCourseList, ImCourse} from "../../providers/database/database";
 import {MpeekCoursePage} from "../mpeek-course/mpeek-course";
 
 
@@ -13,7 +13,7 @@ import {MpeekCoursePage} from "../mpeek-course/mpeek-course";
 export class MsearchPage {
 
   queryText: string;
-  searchResult: Array<mCourse> = [];
+  searchResult: Array<ImCourse> = [];
   loader: any;
 
   constructor(
@@ -32,7 +32,7 @@ export class MsearchPage {
 
     if(queryTextLower.length == 0) return;
 
-    let resultArr: Array<mCourse> = [];
+    let resultArr: Array<ImCourse> = [];
 
     this.presentLoading();
 

@@ -24,36 +24,47 @@ export class MloginPage {
 
   tryLogin(FormLogin){
 
-    this.presentLoading();
-
     let formdata: any = FormLogin.value
 
-    //this.auth.loginToMoodle(FormLogin.value).then(data => {
-    this.moodleApi.login(formdata.username, formdata.password).then(data => {
+    //Form validation
+    if(formdata.username && formdata.password){
+      
+      //this.auth.loginToMoodle(FormLogin.value).then(data => {
+        this.presentLoading();
+        this.moodleApi.login(formdata.username, formdata.password).then(data => {
 
-      if(data){
+          if(data){
+  
+            this.loader.dismiss();
+            this.navCtrl.pop();
+            this.navCtrl.push(MhomePage);
+  
+          }else{
+            FormLogin.password = "";
+  
+            this.loader.dismiss();
+  
+            this.alertCtrl.create({
+              title: "Login Failed",
+              subTitle: "Login Failed",
+              buttons: ["OK"]
+            }).present();
+  
+          }
+  
+        }).catch(reason =>{
+          this.loader.dismiss();
+        });
 
-        this.loader.dismiss();
-        this.navCtrl.pop();
-        this.navCtrl.push(MhomePage);
+    } else {
 
-      }else{
-        FormLogin.password = "";
+      this.alertCtrl.create({
+        title: "Required",
+        subTitle: "Enter username and password.",
+        buttons: ["OK"]
+      }).present();
 
-        this.loader.dismiss();
-
-        this.alertCtrl.create({
-          title: "Login Failed",
-          subTitle: "Login Failed",
-          buttons: ["OK"]
-        }).present();
-
-      }
-
-    }).catch(reason =>{
-      this.loader.dismiss();
-    });
-
+    }
     //this.loader.dismiss();
 
   }

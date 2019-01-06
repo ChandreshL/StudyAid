@@ -21,9 +21,9 @@ export class MhomePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public popoverCtrl: PopoverController,
     private appdb: DatabaseProvider,
     private moodleApi: MoodleApiProvider,
+    public popoverCtrl: PopoverController,
     public loadingCtrl: LoadingController,
     private storage: Storage
   ) {
@@ -32,6 +32,11 @@ export class MhomePage {
 
   ionViewDidEnter() {
 
+    /**
+     * Enrolled is a temporary variable in storage
+     * to auto refresh the enrolled courses after enrolling in the course.
+     * the variable is set in mpeek-course.ts popToHome()
+     */
     this.storage.get('enrolled').then((val)=>{
 
       if(val == 'yes'){
@@ -54,20 +59,15 @@ export class MhomePage {
 
   }
 
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(MhomePopMenuComponent);
-    popover.present({
-      ev: myEvent
-    });
-  }
 
-  searchCourse(){
+  searchButton(){
     this.navCtrl.push(MsearchPage);
   }
 
   refreshCourse(){
     this.getCoursesFromAPI();
   }
+
 
   openCourse(index){
 
@@ -80,6 +80,7 @@ export class MhomePage {
 
   }
 
+
   getCoursesFromAPI(){
     this.loader.dismissAll();
     this.presentLoading();
@@ -91,7 +92,7 @@ export class MhomePage {
       if(data){
 
         this.coursesList = data;
-        this.saveCoursesToDb(data);
+        this.saveCoursesToDb();
       }
 
       this.loader.dismissAll();
@@ -124,13 +125,13 @@ export class MhomePage {
     });
   }
 
-  saveCoursesToDb(data: Array<ImEnrolledCourse>){
+  saveCoursesToDb(){
 
       this.appdb.transaction('rw', this.appdb.enrolledCourses, async() => {
 
         this.appdb.enrolledCourses.clear().then( result => {
 
-          this.appdb.enrolledCourses.bulkAdd(data)
+          this.appdb.enrolledCourses.bulkAdd(this.coursesList)
             .then(value => {})
             .catch(reason => {});
 
@@ -139,6 +140,15 @@ export class MhomePage {
       }).catch(e => {
         console.log(e.stack || e);
       });
+  }
+
+
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(MhomePopMenuComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
   presentLoading(){
