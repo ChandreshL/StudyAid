@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {MhomePage} from "../mhome/mhome";
 import { AlertController } from "ionic-angular";
-import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
+import { MoodledataProvider } from './../../providers/moodledata/moodledata';
 
 
 @IonicPage()
@@ -15,7 +15,7 @@ export class MloginPage {
   loader: any;
 
   constructor(
-    private moodleApi: MoodleApiProvider,
+    private mdata: MoodledataProvider,
     public loadingCtrl: LoadingController,
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -31,7 +31,7 @@ export class MloginPage {
       
       //this.auth.loginToMoodle(FormLogin.value).then(data => {
         this.presentLoading();
-        this.moodleApi.login(formdata.username, formdata.password).then(data => {
+        this.mdata.login(formdata.username, formdata.password).then(data => {
 
           if(data){
   

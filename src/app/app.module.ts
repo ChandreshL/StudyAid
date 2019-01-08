@@ -7,36 +7,41 @@ import { HttpClientModule } from "@angular/common/http";
 import { IonicStorageModule} from "@ionic/storage";
 
 import { MyApp } from './app.component';
+
 import { HomePage } from '../pages/home/home';
+import {MhomePopMenuComponent} from "../components/mhome-pop-menu/mhome-pop-menu";
+
 import {MhomePage} from "../pages/mhome/mhome";
 import {MloginPage} from "../pages/mlogin/mlogin";
 import {MsearchPage} from "../pages/msearch/msearch";
 import {MenrollPage} from "../pages/menroll/menroll";
 import {McourseContentPage} from "../pages/mcourse-content/mcourse-content";
+import {MpeekCoursePage} from "../pages/mpeek-course/mpeek-course";
+
 import {ShomePage} from "../pages/shome/shome";
-import {LhomePage} from "../pages/lhome/lhome";
 import {SlistPage} from "../pages/slist/slist";
 import {ScalenderPage} from "../pages/scalender/scalender";
+import {LhomePage} from "../pages/lhome/lhome";
+
 import {DatabaseProvider} from "../providers/database/database";
 import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
-import {MpeekCoursePage} from "../pages/mpeek-course/mpeek-course";
-import {MhomePopMenuComponent} from "../components/mhome-pop-menu/mhome-pop-menu";
+import { MoodledataProvider } from '../providers/moodledata/moodledata';
 
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    MhomePage,
     MloginPage,
+    MhomePage,
     MsearchPage,
+    MpeekCoursePage,
     MenrollPage,
     McourseContentPage,
     ShomePage,
     SlistPage,
     ScalenderPage,
     LhomePage,
-    MpeekCoursePage,
     MhomePopMenuComponent
 
   ],
@@ -50,16 +55,16 @@ import {MhomePopMenuComponent} from "../components/mhome-pop-menu/mhome-pop-menu
   entryComponents: [
     MyApp,
     HomePage,
-    MhomePage,
     MloginPage,
+    MhomePage,
     MsearchPage,
+    MpeekCoursePage,
     MenrollPage,
     McourseContentPage,
     ShomePage,
     SlistPage,
     ScalenderPage,
     LhomePage,
-    MpeekCoursePage,
     MhomePopMenuComponent
   ],
   providers: [
@@ -67,7 +72,8 @@ import {MhomePopMenuComponent} from "../components/mhome-pop-menu/mhome-pop-menu
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DatabaseProvider,
-    MoodleApiProvider
+    MoodleApiProvider,
+    MoodledataProvider
   ]
 })
 export class AppModule {}

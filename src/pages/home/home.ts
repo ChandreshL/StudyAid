@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {MloginPage} from "../mlogin/mlogin";
 import {MhomePage} from "../mhome/mhome";
-import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
 import {ShomePage} from "../shome/shome";
 import {LhomePage} from "../lhome/lhome";
+import { MoodledataProvider } from './../../providers/moodledata/moodledata';
+
 
 @Component({
   selector: 'page-home',
@@ -14,14 +15,14 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
-    public moodleApi: MoodleApiProvider
+    private mdata: MoodledataProvider
     ) {
 
   }
 
   openMoodle(){
 
-    this.moodleApi.isLoggedIn().then(value => {
+    this.mdata.isLoggedIn().then(value => {
 
       if(value){
         this.navCtrl.push(MhomePage);

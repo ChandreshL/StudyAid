@@ -48,6 +48,28 @@ export class DatabaseProvider extends  Dexie{
 
   }
 
+    //save data list to database
+  saveListToDb(table: Dexie.Table<any,any>, dataList: any[], overwrite?: boolean){
+
+    this.transaction('rw', table, async() => {
+
+      if(overwrite){
+        table.clear().then( result => {
+          table.bulkAdd(dataList)
+            .then(value => {})
+            .catch(reason => {});
+        });
+      }else{
+        table.bulkAdd(dataList)
+        .then(value => {})
+        .catch(reason => {});
+      }
+
+    }).catch(e => {
+      console.log("Error, moodledata saveToDb");
+      //console.log(e.stack || e);
+    });
+  }
 
 }
 

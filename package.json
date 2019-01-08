@@ -1,7 +1,7 @@
 {
   "name": "studyaid",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
+  "version": "1.2.0",
+  "author": "Chandresh Luhar",
   "homepage": "http://ionicframework.com/",
   "private": true,
   "scripts": {
@@ -42,7 +42,7 @@
     "@ionic/app-scripts": "^3.2.1",
     "typescript": "~2.6.2"
   },
-  "description": "An Ionic project",
+  "description": "An app for univeristy students.",
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},

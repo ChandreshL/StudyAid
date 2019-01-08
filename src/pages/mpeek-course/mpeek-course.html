@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content >
 
   <ion-list>
 
@@ -29,14 +29,13 @@
     </ion-item>
 
     <ion-item>
-      <button *ngIf="btnShow" ion-button  block color="secondary" (click)="enrollButton()">
+      <button *ngIf="btnShow" ion-button block (click)="enrollButton()">
         Enroll
       </button>
 
-      <button *ngIf="!btnShow" ion-button  block color="secondary" (click)="popToHome()">
+      <button *ngIf="!btnShow" ion-button block (click)="popToHome()">
         View course
       </button>
-
     </ion-item>
 
   </ion-list>
