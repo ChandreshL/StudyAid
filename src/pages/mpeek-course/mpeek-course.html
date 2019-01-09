@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content >
 
   <ion-list>
 
@@ -24,19 +24,18 @@
       {{ getTeachersName(course.contacts) }}
     </ion-item>
 
-    <ion-item *ngIf="!btnShow">
+    <ion-item *ngIf="alradyEnrolled">
       You are enrolled in this course.
     </ion-item>
 
     <ion-item>
-      <button *ngIf="btnShow" ion-button  block color="secondary" (click)="enrollButton()">
+      <button *ngIf="!alradyEnrolled" ion-button block (click)="enrollButton()">
         Enroll
       </button>
 
-      <button *ngIf="!btnShow" ion-button  block color="secondary" (click)="popToHome()">
+      <button *ngIf="alradyEnrolled" ion-button block (click)="popToHome()">
         View course
       </button>
-
     </ion-item>
 
   </ion-list>

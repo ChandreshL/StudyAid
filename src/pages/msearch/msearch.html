@@ -14,7 +14,7 @@
     <ion-searchbar placeholder="Search courses"
                    [(ngModel)]="queryText"
                    (ionInput)="fetchCourses($event)"
-                   [debounce]="600">
+                   [debounce]="1000">
     </ion-searchbar>
 
   </ion-toolbar>
@@ -22,8 +22,7 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
   <ion-list>
     <ion-item>
       <button ion-item  *ngFor="let item of searchResult;  let i = index;" (click)="peekCourse(i)">

@@ -3,10 +3,11 @@ import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angu
 import {MsearchPage} from "../msearch/msearch";
 import { PopoverController } from 'ionic-angular';
 import {MhomePopMenuComponent} from "../../components/mhome-pop-menu/mhome-pop-menu";
-import {DatabaseProvider, ImEnrolledCourse } from "../../providers/database/database";
-import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
 import { Storage } from '@ionic/storage';
 import {McourseContentPage} from "../mcourse-content/mcourse-content";
+
+import { ImEnrolledCourse } from "../../providers/database/database";
+import { MoodledataProvider } from './../../providers/moodledata/moodledata';
 
 @IonicPage()
 @Component({
@@ -21,9 +22,8 @@ export class MhomePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    private mdata: MoodledataProvider,
     public popoverCtrl: PopoverController,
-    private appdb: DatabaseProvider,
-    private moodleApi: MoodleApiProvider,
     public loadingCtrl: LoadingController,
     private storage: Storage
   ) {
@@ -32,6 +32,11 @@ export class MhomePage {
 
   ionViewDidEnter() {
 
+    /**
+     * Enrolled is a temporary variable in storage
+     * to auto refresh the enrolled courses after enrolling in the course.
+     * the variable is set in mpeek-course.ts popToHome()
+     */
     this.storage.get('enrolled').then((val)=>{
 
       if(val == 'yes'){
@@ -43,10 +48,9 @@ export class MhomePage {
       this.storage.remove('enrolled');
 
     }).catch( (reason) => {
-
-      console.log("storage:enrolled with error");
-      this.getCoursesFromDb();
+      console.log("Error mhome ionViewDidEnter");
       this.storage.remove('enrolled');
+      this.getCoursesFromDb();
     });
 
 
@@ -54,20 +58,15 @@ export class MhomePage {
 
   }
 
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(MhomePopMenuComponent);
-    popover.present({
-      ev: myEvent
-    });
-  }
 
-  searchCourse(){
+  searchButton(){
     this.navCtrl.push(MsearchPage);
   }
 
   refreshCourse(){
     this.getCoursesFromAPI();
   }
+
 
   openCourse(index){
 
@@ -77,68 +76,56 @@ export class MhomePage {
     //open the card with courseid
     this.navCtrl.push(McourseContentPage, { courseid: courseid, courseName: courseName});
 
-
   }
+
 
   getCoursesFromAPI(){
     this.loader.dismissAll();
     this.presentLoading();
 
-    console.log("getting from api");
+    this.mdata.getEnrolledCoursesFromAPI(true).then( (data: Array<ImEnrolledCourse>) =>{
 
-    this.moodleApi.getEnrolledCourses().then((data: Array<ImEnrolledCourse>) => {
-
-      if(data){
-
+      if(data)
         this.coursesList = data;
-        this.saveCoursesToDb(data);
+      else{
+        this.coursesList = new Array<ImEnrolledCourse>();
       }
-
+      
       this.loader.dismissAll();
+      
 
     }).catch(reason => {
-
+      
       console.log("error getting from api");
       this.loader.dismissAll();
     });
+
   }
 
   getCoursesFromDb(){
-
     this.presentLoading();
 
-    this.appdb.enrolledCourses.toCollection().toArray().then(data =>{
+    this.mdata.getEnrolledCoursesFromDb().then((data: Array<ImEnrolledCourse>) =>{
 
-        if(data && data.length == 0){
-
-          console.log("no data in database.");
-          this.getCoursesFromAPI();
-
-        } else {
+        if(data && data.length > 0){
           this.coursesList = data;
-          this.loader.dismissAll();
         }
+        this.loader.dismissAll();
+
     }).catch(reason => {
       this.loader.dismissAll();
-      console.log(reason);
+      console.log("Error mhome getCourseFromDb");
     });
+
+    this.loader.dismissAll();
   }
 
-  saveCoursesToDb(data: Array<ImEnrolledCourse>){
 
-      this.appdb.transaction('rw', this.appdb.enrolledCourses, async() => {
-
-        this.appdb.enrolledCourses.clear().then( result => {
-
-          this.appdb.enrolledCourses.bulkAdd(data)
-            .then(value => {})
-            .catch(reason => {});
-
-        });
-
-      }).catch(e => {
-        console.log(e.stack || e);
-      });
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(MhomePopMenuComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
   presentLoading(){

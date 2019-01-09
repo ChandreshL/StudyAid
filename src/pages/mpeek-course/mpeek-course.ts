@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
-import {IContacts, ImCourseEnrolmentMethods, ImEnrolledCourse, mCourse} from "../../providers/database/database";
-import {MoodleApiProvider} from "../../providers/moodle-api/moodle-api";
 import { Storage } from "@ionic/storage";
+
+import {IContacts, ImCourseEnrolmentMethods, ImEnrolledCourse, ImCourse} from "../../providers/database/database";
+import { MoodledataProvider } from './../../providers/moodledata/moodledata';
 
 
 interface ImSelfEnrolUser {
@@ -29,26 +30,26 @@ interface ImEnrolWarning {
 })
 export class MpeekCoursePage {
 
-  course: mCourse;
-  btnShow: boolean;
+  course: ImCourse;
+  alradyEnrolled: boolean;
   enrolKey: string;
   instanceid: number;
   requirePassword: boolean;
   loader: any;
 
   constructor(
-    private moodleApi: MoodleApiProvider,
     public navCtrl: NavController,
     public navParams: NavParams,
+    private mdata: MoodledataProvider,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     private storage: Storage
   ) {
 
-    this.course = this.navParams.get('param1');
+    this.course = this.navParams.get('course');
 
     //this.moodleApi.getEnrolledCourses()
-    this.btnShow = true;
+    this.alradyEnrolled = false;
     this.requirePassword = false;
 
   }
@@ -57,18 +58,28 @@ export class MpeekCoursePage {
 
     this.presentLoading();
 
-    this.moodleApi.getEnrolledCourses().then((data: Array<ImEnrolledCourse>) => {
+
+    //check if the course is already enrolled.
+
+    this.mdata.getEnrolledCoursesFromAPI().then((data: Array<ImEnrolledCourse>) => {
 
       if(data && this.isArray(data)) {
-        data.forEach(d => {
+
+        //some will break the loop when it returns true otherwise false
+        this.alradyEnrolled = data.some(c => c.id == this.course.id);
+
+        /* data.forEach(d => {
           if (d.id == this.course.id) {
-            this.btnShow = false;
+            this.alradyEnrolled = true;
           }
-        });
+        }); */
+
       }
       this.loader.dismiss();
+
     }, reason => {
-      console.log("promise error");
+      console.log("error mpeek-course ionViewDidEnter");
+
       this.loader.dismiss();
     });
 
@@ -77,83 +88,69 @@ export class MpeekCoursePage {
   getTeachersName(contacts: Array<IContacts>){
     let contactsStr = "";
     contacts.forEach(c => {
-      if(c.fullname) contactsStr+= ", " + c.fullname;
+      if(c.fullname) contactsStr += ", " + c.fullname;
     });
     return contactsStr.substr(2);
   }
 
-  enrollButton(){
-    console.log("enrolled clicked");
 
+  enrollButton(){
+
+    /**
+     * if user has clicked cancel in the password prompt first time.
+     * then second time show prompt direct.
+     */
     if(this.requirePassword){
       this.showPrompt();
       //this.enrollWithPassword();
       return;
     }
 
-    if(!this.instanceid) {
-
-      //get instance id
-      this.presentLoading();
-
-      this.moodleApi.getCourseEnrolmentMethods(this.course.id).then((data: Array<ImCourseEnrolmentMethods>) => {
-
-        data.forEach(d => {
-          if (d.type == 'self') {
-            this.instanceid = d.id;
-          }
-        });
-
+    this.presentLoading();
+    
+    //get instance id
+    this.getInstanceId().then(data=>{
         //enroll without enrolkey
         if (this.instanceid && !this.requirePassword) {
-          this.sendEnrollRequest(this.course.id, this.enrolKey, this.instanceid).then((data: ImSelfEnrolUser) => {
 
+          this.mdata.enrollInCourse(this.course.id, this.enrolKey, this.instanceid).then((data: ImSelfEnrolUser) => {
+
+            //data.status is boolean
             if(data.status){
-              console.log("enrolled without password");
-
-              this.loader.dismissAll();
               this.popToHome();
-
             }else {
-
+              //if status is false then check warnings codes.
               //if warningcode 4 = invalid key then mark requiredpassword.
               data.warnings.forEach(w => {
                 if(w.warningcode == "4") {
                   this.requirePassword = true;
-                  this.loader.dismissAll();
                   this.showPrompt();
-                  //this.enrollWithPassword();
                 }
               });
             }
 
-
+            this.loader.dismissAll();
           }).catch(reason => {
             this.loader.dismissAll();
           });
-        }
 
-      }).catch(reason => {
-        this.loader.dismissAll();
-      });
-    }
+        }
+    });
+
+    if(this.loader) this.loader.dismissAll();
 
   }
 
   enrollWithPassword(){
 
-    //we are in mark requiredpassword.
     if(this.requirePassword && this.instanceid) {
-
-      //this.showPrompt();
 
       if(this.enrolKey && this.enrolKey.length > 0){
         this.presentLoading();
-        this.sendEnrollRequest(this.course.id, this.enrolKey, this.instanceid).then((data: ImSelfEnrolUser) => {
-
+        this.mdata.enrollInCourse(this.course.id, this.enrolKey, this.instanceid).then((data: ImSelfEnrolUser) => {
+          
           if(data.status){
 
-            console.log("enrolled with password!!!");
             this.loader.dismissAll();
             this.popToHome();
 
@@ -172,11 +169,57 @@ export class MpeekCoursePage {
     }
   }
 
-  sendEnrollRequest(courseid, password, instanceid){
+  /**
+   * Instance Id parameter required to enroll in a course.
+   * 
+   */
+  getInstanceId(){
+
+    return new Promise(resolve => {
+      this.mdata.getCourseEnrolmentMethods(this.course.id).then((data: Array<ImCourseEnrolmentMethods>) => {
+
+        data.forEach(d => {
+          if (d.type == 'self') {
+            this.instanceid = d.id;
+          }
+        });
+
+        if(this.instanceid) {
+          resolve(true);
+        }
+        else{
+          resolve(false);
+        }
+      }).catch(reason => {
+        resolve(false);
+      });
+    });
+
+  }
+
+/*   sendEnrollRequest(courseid, password, instanceid){
     return this.moodleApi.enrollInCourse(courseid, password, instanceid).then(data => {
       return data;
     });
+  } */
+
+
+  popToHome(){
+
+    /**
+     * enrolled is a temporary variable in storage
+     * to auto refresh the enrolled courses after enrolling in the course.
+     * It is removed in mhome.ts
+     */
+      this.storage.set('enrolled','yes');
+  
+      //Pop to two pages to Mhomepage
+      this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length()-3));
+  
+      //this.navCtrl.push(McourseListPage, { param1: this.course.id});
+  
   }
+
 
   showPrompt() {
     const prompt = this.alertCtrl.create({
@@ -221,17 +264,6 @@ export class MpeekCoursePage {
       content: "Processing..."
     });
     this.loader.present();
-  }
-
-  popToHome(){
-
-    this.storage.set('enrolled','yes');
-
-    //Pop to two pages to Mhomepage
-    this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length()-3));
-
-    //this.navCtrl.push(McourseListPage, { param1: this.course.id});
-
   }
 
   isArray(what) {

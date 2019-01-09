@@ -16,48 +16,36 @@ export class DatabaseProvider extends  Dexie{
     super("StudyAidDb");
 
     this.version(1).stores({
-        user: "token, privatetoken",
-        site: "sitename, username, firstname, lastname, fullname, lang, userid",
-        enrolledCourses: "id, shortname, fullname",
+        user: "token",
+        site: "siteurl",
+        enrolledCourses: "id",
         courseSectionContent: "id, courseId"
     });
   }
 
-  saveToDatabase(table:string,data:any, id?: number){
+    //save data list to database
+  saveListToDb(table: Dexie.Table<any,any>, dataList: any[], overwrite?: boolean){
 
-    //convert data object to table data.
-    let dataObj;
-    switch (table){
-      case "user":
-        dataObj = User.fromJSON(data);
-        break;
-      case  "site":
-        dataObj = Site.fromJSON(data);
-        break;
-      case "enrolledCourses":
-        dataObj = mEnrolledCourse.fromJSON(data);
-        break;
-      case "courseSectionContent":
-        if(id) {
-          dataObj = null;
-        }else {
-          dataObj = mCourseSectionContent.fromJSONWithCourse(id, data);
-        }
-        break;
-      default:
-        dataObj = null;
-    }
+    this.transaction('rw', table, () => {
 
-    return this.table(table).add(dataObj);
+      if(overwrite){
+        table.clear().then( result => {
+          table.bulkAdd(dataList)
+            .then(value => {})
+            .catch(reason => {});
+        });
+      }else{
+        table.bulkAdd(dataList)
+        .then(value => {})
+        .catch(reason => {});
+      }
 
+    }).catch(e => {
+      console.log("Error, moodledata saveToDb");
+      //console.log(e.stack || e);
+    });
   }
 
-
-}
-
-export interface IContacts {
-  id: number,
-  fullname: string
 }
 
 export interface IUser{
@@ -82,6 +70,45 @@ export interface ISite {
 
 }
 
+export interface ImEnrolledCourse {
+  id: number, //id of course
+  shortname: string,
+  fullname: string,
+  enrolledusercount: number,
+  idnumber: string,   //id number of course
+  visible: number,    //1 means visible, 0 means hidden course
+  summary: string,
+  summaryformat: number,   //Optional summary format (1 = HTML, 0 = MOODLE, 2 = PLAIN or 4 = MARKDOWN)
+  format: string,
+  showgrades: boolean,
+  lang: string,
+  enablecompletion: boolean,
+  category: number,
+  progress: number,
+  startdate: number,
+  enddate: number
+}
+
+export interface ImCourseSectionContent {
+
+  courseId: number,
+  id:  number,
+  name:  string,
+  visible:  number,
+  summary:  string,
+  summaryformat:  number,
+  section:  number,
+  hiddenbynumsections:  number,
+  uservisible:  boolean
+
+}
+
+
+export interface IContacts {
+  id: number,
+  fullname: string
+}
+
 export interface ImCourse {
 
   id: number,
@@ -102,27 +129,8 @@ export interface ImCourse {
 
 export interface ImCourseList {
     total: number,
-    courses: Array<mCourse>,
+    courses: Array<ImCourse>,
     warnings: Array<any>
-}
-
-export interface ImEnrolledCourse {
-  id: number, //id of course
-  shortname: string,
-  fullname: string,
-  enrolledusercount: number,
-  idnumber: string,   //id number of course
-  visible: number,    //1 means visible, 0 means hidden course
-  summary: string,
-  summaryformat: number,   //Optional summary format (1 = HTML, 0 = MOODLE, 2 = PLAIN or 4 = MARKDOWN)
-  format: string,
-  showgrades: boolean,
-  lang: string,
-  enablecompletion: boolean,
-  category: number,
-  progress: number,
-  startdate: number,
-  enddate: number
 }
 
 export interface ImCourseEnrolmentMethods {
@@ -134,23 +142,10 @@ export interface ImCourseEnrolmentMethods {
   wsfunction: string,   // Optional webservice function to get more information
 }
 
-export interface ImCourseSectionContent {
-
-  courseId: number,
-  id:  number,
-  name:  string,
-  visible:  number,
-  summary:  string,
-  summaryformat:  number,
-  section:  number,
-  hiddenbynumsections:  number,
-  uservisible:  boolean
-
-}
 
 
 
-export class User implements IUser{
+/* export class User implements IUser{
 
   token:string;
   privatetoken?: string;
@@ -172,9 +167,9 @@ export class User implements IUser{
 
   }
 
-}
+} */
 
-export class Site implements  ISite{
+/* export class Site implements  ISite{
   constructor(
     public firstname: string,
     public fullname: string,
@@ -214,9 +209,9 @@ export class Site implements  ISite{
 
   }
 
-}
+} */
 
-export class mCourse implements ImCourse{
+/* export class mCourse implements ImCourse{
 
   constructor(
     public id: number,
@@ -256,9 +251,9 @@ export class mCourse implements ImCourse{
     );
   }
 
-}
+} */
 
-export class mEnrolledCourse implements ImEnrolledCourse{
+/* export class mEnrolledCourse implements ImEnrolledCourse{
   constructor(
     public id: number,
     public shortname: string,
@@ -303,9 +298,10 @@ export class mEnrolledCourse implements ImEnrolledCourse{
     );
   }
 
-}
+} */
 
-export class mCourseSectionContent {
+
+/* export class mCourseSectionContent {
 
   constructor(
     public courseId: number,
@@ -360,4 +356,4 @@ export class mCourseSectionContent {
   }
 
 
-}
+} */
