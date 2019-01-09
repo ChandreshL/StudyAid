@@ -1,0 +1,1 @@
+Research Project for Summer semester. A mobile app for university for accessing important web application functionality.
