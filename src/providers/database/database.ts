@@ -16,42 +16,17 @@ export class DatabaseProvider extends  Dexie{
     super("StudyAidDb");
 
     this.version(1).stores({
-        user: "token, privatetoken",
-        site: "sitename, username, firstname, lastname, fullname, lang, userid",
-        enrolledCourses: "id, shortname, fullname",
+        user: "token",
+        site: "siteurl",
+        enrolledCourses: "id",
         courseSectionContent: "id, courseId"
     });
-  }
-
-  saveToDatabase(table:string,data:any, id?: number){
-
-    //convert data object to table data.
-    let dataObj;
-    switch (table){
-      case "user":
-        dataObj = data as IUser;
-        break;
-      case  "site":
-        dataObj = data as ISite;
-        break;
-      case "enrolledCourses":
-        dataObj = data as ImEnrolledCourse;
-        break;
-      case "courseSectionContent":
-        dataObj = data as ImCourseSectionContent;
-        break;
-      default:
-        dataObj = null;
-    }
-
-    return this.table(table).add(dataObj);
-
   }
 
     //save data list to database
   saveListToDb(table: Dexie.Table<any,any>, dataList: any[], overwrite?: boolean){
 
-    this.transaction('rw', table, async() => {
+    this.transaction('rw', table, () => {
 
       if(overwrite){
         table.clear().then( result => {

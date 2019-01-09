@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MoodleApiProvider } from './../moodle-api/moodle-api';
 import { DatabaseProvider, IUser, ISite, ImEnrolledCourse, ImCourseSectionContent } from './../database/database';
-import Dexie from 'dexie';
-
 
 @Injectable()
 export class MoodledataProvider {
@@ -95,24 +93,86 @@ export class MoodledataProvider {
 
 
   //search course
+  searchCourses(queryText){
 
+    return new Promise(resolve => {
+      this.mAPI.searchCourse(queryText).subscribe(data => {
+        
+        if(data.hasOwnProperty('courses')){
+          resolve(data);
+        }else{
+          resolve(false);
+        }
+      }, error =>{
+        console.log(error);
+        resolve(false);
+      });
+
+    });
+
+  }
 
   //enroll into courses
- 
 
+  enrollInCourse(courseid, password, instanceid){
+    
+    return new Promise(resolve => {
 
+      this.mAPI.enrollInCourse(courseid, password, instanceid).subscribe(data => {
+        
+        //the status is boolean
+        //if password required then it is false if password is not given
+        if(data.hasOwnProperty('status')){
+          resolve(data);
+        }else{
+          resolve(false);
+        }
+      }, error =>{
+        console.log("Error moodledata enrollInCourse");
+        resolve(false);
+      });
+
+    });
+
+  }
+  
+  getCourseEnrolmentMethods(courseId){
+    
+    return new Promise(resolve => {
+
+      this.mAPI.getCourseEnrolmentMethods(courseId).subscribe(data => {
+        if(this.isArray(data)){
+          resolve(data);
+        }else{
+          console.log(data);
+          resolve(false);
+        }
+      }, error =>{
+        console.log("Error moodledata getCourseEnrolmentMethods");
+        resolve(false);
+      });
+
+    });
+
+  }
+
+  
   //get enrolled course
-  getEnrolledCoursesFromAPI(){
+  getEnrolledCoursesFromAPI(saveToDb?: boolean){
 
     return new Promise(resolve => {
 
       this.mAPI.getEnrolledCourses().subscribe((data: Array<ImEnrolledCourse>) => {
 
-        if(data && data.length > 0){
+        if(data){
+          
           //save data into database. overwrite = true
-          this.mdb.saveListToDb(this.mdb.enrolledCourses,data, true);
+          if(saveToDb)
+            this.mdb.saveListToDb(this.mdb.enrolledCourses,data, true);
+
           resolve(data);
-        } else {
+
+        }else{
           resolve(false);
         }
 
@@ -203,5 +263,8 @@ export class MoodledataProvider {
 
   }
 
+  isArray(what) {
+    return Object.prototype.toString.call(what) === '[object Array]';
+  }
 
 }

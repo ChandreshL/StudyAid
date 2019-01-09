@@ -83,10 +83,16 @@ export class MhomePage {
     this.loader.dismissAll();
     this.presentLoading();
 
-    this.mdata.getEnrolledCoursesFromAPI().then( (data: Array<ImEnrolledCourse>) =>{
+    this.mdata.getEnrolledCoursesFromAPI(true).then( (data: Array<ImEnrolledCourse>) =>{
 
-      this.coursesList = data;
+      if(data)
+        this.coursesList = data;
+      else{
+        this.coursesList = new Array<ImEnrolledCourse>();
+      }
+      
       this.loader.dismissAll();
+      
 
     }).catch(reason => {
       

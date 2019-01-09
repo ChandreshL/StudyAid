@@ -1,7 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import { DatabaseProvider, IUser, ISite } from "../database/database";
-
 
 @Injectable()
 export class MoodleApiProvider {
@@ -12,11 +10,7 @@ export class MoodleApiProvider {
   private token: string;
   private userId: number;
 
-  constructor(public http: HttpClient, private appdb: DatabaseProvider) {
-
-    // this.appdb.user.mapToClass(User);
-    // this.appdb.site.mapToClass(Site);
-    // this.appdb.enrolledCourses.mapToClass(mEnrolledCourse);
+  constructor(public http: HttpClient) {
 
   }
 
@@ -37,8 +31,6 @@ export class MoodleApiProvider {
 */
   login(username:string, password:string){
 
-    let url = this.siteUrl + "/" + this.authUrl;
-
     //"22123" "Abcdef1*"
     const body = new HttpParams()
       .set("service", "moodle_mobile_app")
@@ -47,7 +39,7 @@ export class MoodleApiProvider {
 
     let Loggedin: boolean = false;
 
-    return this.sendPostRequest(url,body.toString(), true);
+    return this.sendPostRequest(body.toString(), true);
 
   }
 
@@ -57,14 +49,13 @@ export class MoodleApiProvider {
 */
 
   getSiteInfo(){
-    let url = this.siteUrl + "/" + this.apiUrl;
 
     const body = new HttpParams()
       .set("wstoken", this.token)
       .set("moodlewsrestformat", "json")
       .set("wsfunction", "core_webservice_get_site_info");
 
-    return this.sendPostRequest(url,body.toString());
+    return this.sendPostRequest(body.toString());
 
   }
 
@@ -75,8 +66,6 @@ export class MoodleApiProvider {
 
   searchCourse(searchStr){
 
-    let url = this.siteUrl + "/" + this.apiUrl;
-
     const body = new HttpParams()
       .set("wstoken", this.token )
       .set("moodlewsrestformat", "json")
@@ -86,26 +75,11 @@ export class MoodleApiProvider {
       .set("page", "0")
       .set("perpage", "10");
 
-    return new Promise(resolve => {
-
-      this.sendPostRequest(url,body.toString()).subscribe(data => {
-        if(data.hasOwnProperty('courses')){
-          resolve(data);
-        }else{
-          resolve("");
-        }
-      }, error =>{
-        console.log(error);
-        resolve("");
-      });
-
-    });
+    return this.sendPostRequest(body.toString());
 
   }
 
   getCourseEnrolmentMethods(courseid){
-
-    let url = this.siteUrl + "/" + this.apiUrl;
 
     const body = new HttpParams()
       .set("wstoken", this.token )
@@ -113,28 +87,11 @@ export class MoodleApiProvider {
       .set("wsfunction", "core_enrol_get_course_enrolment_methods")
       .set("courseid", courseid);
 
-
-    return new Promise(resolve => {
-
-      this.sendPostRequest(url,body.toString()).subscribe(data => {
-        if(this.isArray(data)){
-          resolve(data);
-        }else{
-          console.log(data);
-          resolve(false);
-        }
-      }, error =>{
-        console.log(error);
-        resolve(false);
-      });
-
-    });
+    return this.sendPostRequest(body.toString());
 
   }
 
   enrollInCourse(courseid, password, instanceid){
-
-    let url = this.siteUrl + "/" + this.apiUrl;
 
     const body = new HttpParams()
       .set("wstoken", this.token )
@@ -144,22 +101,7 @@ export class MoodleApiProvider {
       .set("password", password)
       .set("instanceid", instanceid);
 
-
-    return new Promise(resolve => {
-
-      this.sendPostRequest(url,body.toString()).subscribe(data => {
-        if(data.hasOwnProperty('status')){
-          resolve(data);
-        }else{
-          console.log(data);
-          resolve(false);
-        }
-      }, error =>{
-        console.log(error);
-        resolve(false);
-      });
-
-    });
+    return this.sendPostRequest(body.toString());
 
   }
 
@@ -171,15 +113,13 @@ export class MoodleApiProvider {
 
   getEnrolledCourses(){
 
-    let url = this.siteUrl + "/" + this.apiUrl;
-
     const body = new HttpParams()
       .set("wstoken", this.token )
       .set("moodlewsrestformat", "json")
       .set("wsfunction", "core_enrol_get_users_courses")
       .set("userid", this.userId.toString());
 
-      return this.sendPostRequest(url,body.toString());
+      return this.sendPostRequest(body.toString());
 
   }
 
@@ -191,15 +131,13 @@ export class MoodleApiProvider {
 
   getCourseContent(courseId){
 
-    let url = this.siteUrl + "/" + this.apiUrl;
-
     const body = new HttpParams()
       .set("wstoken", this.token )
       .set("moodlewsrestformat", "json")
       .set("wsfunction", "core_course_get_contents")
       .set("courseid", courseId);
 
-    return this.sendPostRequest(url,body.toString());
+    return this.sendPostRequest(body.toString());
 
   }
 
@@ -208,9 +146,9 @@ export class MoodleApiProvider {
 * Send http request
 */
 
-  sendPostRequest(url:string, body:string, login?: boolean){
+  sendPostRequest(body:string, login?: boolean){
 
-    url = this.siteUrl + "/" + this.apiUrl;
+    let url = this.siteUrl + "/" + this.apiUrl;
     if(login){
       url = this.siteUrl + "/" + this.authUrl;
     }
@@ -229,8 +167,5 @@ export class MoodleApiProvider {
 
   }
 
-  isArray(what) {
-    return Object.prototype.toString.call(what) === '[object Array]';
-  }
 
 }
