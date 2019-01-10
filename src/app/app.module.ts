@@ -18,14 +18,20 @@ import {MenrollPage} from "../pages/menroll/menroll";
 import {McourseContentPage} from "../pages/mcourse-content/mcourse-content";
 import {MpeekCoursePage} from "../pages/mpeek-course/mpeek-course";
 
+import { MMessageTabsPage } from './../pages/m-message-tabs/m-message-tabs';
+import { ContactsPage } from './../pages/contacts/contacts';
+import { MessagePage } from './../pages/message/message';
+
 import {ShomePage} from "../pages/shome/shome";
 import {SlistPage} from "../pages/slist/slist";
 import {ScalenderPage} from "../pages/scalender/scalender";
+
 import {LhomePage} from "../pages/lhome/lhome";
 
 import {DatabaseProvider} from "../providers/database/database";
 import {MoodleApiProvider} from "../providers/moodle-api/moodle-api";
 import { MoodledataProvider } from '../providers/moodledata/moodledata';
+import { MoodleMessageDataProvider } from '../providers/moodle-message-data/moodle-message-data';
 
 
 @NgModule({
@@ -38,6 +44,9 @@ import { MoodledataProvider } from '../providers/moodledata/moodledata';
     MpeekCoursePage,
     MenrollPage,
     McourseContentPage,
+    MMessageTabsPage,
+    MessagePage,
+    ContactsPage,
     ShomePage,
     SlistPage,
     ScalenderPage,
@@ -61,6 +70,9 @@ import { MoodledataProvider } from '../providers/moodledata/moodledata';
     MpeekCoursePage,
     MenrollPage,
     McourseContentPage,
+    MMessageTabsPage,
+    MessagePage,
+    ContactsPage,    
     ShomePage,
     SlistPage,
     ScalenderPage,
@@ -73,7 +85,8 @@ import { MoodledataProvider } from '../providers/moodledata/moodledata';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DatabaseProvider,
     MoodleApiProvider,
-    MoodledataProvider
+    MoodledataProvider,
+    MoodleMessageDataProvider
   ]
 })
 export class AppModule {}

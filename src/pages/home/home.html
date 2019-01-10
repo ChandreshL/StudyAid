@@ -12,13 +12,24 @@
 
   <ion-toolbar color="secondary">
     <ion-buttons end>
-      <button ion-button (click)="openMoodle()">
+      <button ion-button (click)="openMoodle('home')">
         <ion-col>
           <ion-row justify-content-center>
           <ion-icon name="school"></ion-icon>
           </ion-row>
           <ion-row>
             <span style="font-size: 1.0rem; padding-top: 5px;">moodle</span>
+          </ion-row>
+        </ion-col>
+      </button>
+
+      <button ion-button (click)="openMoodle('msg')">
+        <ion-col>
+          <ion-row justify-content-center>
+          <ion-icon name="chatboxes"></ion-icon>
+          </ion-row>
+          <ion-row>
+            <span style="font-size: 1.0rem; padding-top: 5px;">messages</span>
           </ion-row>
         </ion-col>
       </button>

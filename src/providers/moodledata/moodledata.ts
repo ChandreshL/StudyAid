@@ -74,6 +74,13 @@ export class MoodledataProvider {
 
     }
 
+  //logout
+  logout(){
+      //delete all data from database.
+      this.mdb.clearAllTables();      
+
+    }
+
 /*
 * get user id, which is used to get enrolled courses
 */

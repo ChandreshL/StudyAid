@@ -3,8 +3,9 @@ import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angu
 import {MsearchPage} from "../msearch/msearch";
 import { PopoverController } from 'ionic-angular';
 import {MhomePopMenuComponent} from "../../components/mhome-pop-menu/mhome-pop-menu";
-import { Storage } from '@ionic/storage';
 import {McourseContentPage} from "../mcourse-content/mcourse-content";
+import { MMessageTabsPage } from './../m-message-tabs/m-message-tabs';
+import { Storage } from '@ionic/storage';
 
 import { ImEnrolledCourse } from "../../providers/database/database";
 import { MoodledataProvider } from './../../providers/moodledata/moodledata';
@@ -61,6 +62,10 @@ export class MhomePage {
 
   searchButton(){
     this.navCtrl.push(MsearchPage);
+  }
+
+  messagesButton(){
+    this.navCtrl.push(MMessageTabsPage);
   }
 
   refreshCourse(){

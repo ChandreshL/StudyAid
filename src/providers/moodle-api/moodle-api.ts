@@ -26,6 +26,34 @@ export class MoodleApiProvider {
       this.userId = u;
   }
 
+
+
+/*
+* Send http request
+*/
+
+  sendPostRequest(body:string, login?: boolean){
+
+    let url = this.siteUrl + "/" + this.apiUrl;
+    if(login){
+      url = this.siteUrl + "/" + this.authUrl;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/x-www-form-urlencoded"
+      })
+    };
+
+    return this.http.post(
+      url,
+      body,
+      httpOptions
+    );
+
+  }
+
+
 /*
 * Login Methods
 */
@@ -36,8 +64,6 @@ export class MoodleApiProvider {
       .set("service", "moodle_mobile_app")
       .set("username", username)
       .set("password", password);
-
-    let Loggedin: boolean = false;
 
     return this.sendPostRequest(body.toString(), true);
 
@@ -142,30 +168,279 @@ export class MoodleApiProvider {
   }
 
 
-/*
-* Send http request
-*/
 
-  sendPostRequest(body:string, login?: boolean){
 
-    let url = this.siteUrl + "/" + this.apiUrl;
-    if(login){
-      url = this.siteUrl + "/" + this.authUrl;
-    }
+  /**
+   * ************************************
+   * Web service APIs for moodle messages.
+   * ************************************
+   */
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/x-www-form-urlencoded"
-      })
-    };
+   /**
+    * get unread conversations count
+    * returns int
+    */
+  getUnreadConversationsCount(){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_get_unread_conversations_count")
+    .set("useridto", this.userId.toString());
 
-    return this.http.post(
-      url,
-      body,
-      httpOptions
-    );
+    //returns int.
+    return this.sendPostRequest(body.toString());
 
   }
+
+
+  /**
+   * 
+   * Message Conversations.
+   */
+
+  getMessageConversations(){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_data_for_messagearea_conversations")
+    .set("userid", this.userId.toString());
+
+    return this.sendPostRequest(body.toString());
+
+/*     {
+      "contacts": [
+          {
+              "userid": 2,
+              "fullname": "Admin Admin",
+              "profileimageurl": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f1",
+              "profileimageurlsmall": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f2",
+              "ismessaging": true,
+              "sentfromcurrentuser": false,
+              "lastmessage": "second conversation test",
+              "messageid": 6,
+              "showonlinestatus": false,
+              "isonline": null,
+              "isread": false,
+              "isblocked": false,
+              "unreadcount": 1
+          },
+          {
+              "userid": 3,
+              "fullname": "Faustina Garstang",
+              "profileimageurl": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f1",
+              "profileimageurlsmall": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f2",
+              "ismessaging": true,
+              "sentfromcurrentuser": false,
+              "lastmessage": "unread counter test",
+              "messageid": 5,
+              "showonlinestatus": false,
+              "isonline": null,
+              "isread": false,
+              "isblocked": false,
+              "unreadcount": 2
+          }
+      ]
+  } */
+
+  }
+
+  
+  /**
+   * 
+   * Message Messages.
+   * limitfrom - start number of the messages to return.
+   * limitnum - total number of messages to return in response
+   */
+
+  getMessages(otherUserId, limitFrom = "0", limitNum = "0"){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_data_for_messagearea_messages")
+    .set("newest", "1")
+    .set("timefrom", "0")
+    .set("currentuserid", this.userId.toString())
+    .set("otheruserid", otherUserId)
+    .set("limitfrom", limitFrom)
+    .set("limitnum", limitNum);
+
+    return this.sendPostRequest(body.toString());
+
+/*     {
+      "iscurrentuser": true,
+      "currentuserid": 3,
+      "otheruserid": 4,
+      "otheruserfullname": "Vonnie Bromfield",
+      "showonlinestatus": true,
+      "isonline": false,
+      "messages": [
+          {
+              "id": 1,
+              "useridfrom": 3,
+              "useridto": 4,
+              "text": "<p>From Messages, Course search, From Student</p>",
+              "displayblocktime": true,
+              "blocktime": "Thursday, 10 January 2019",
+              "position": "right",
+              "timesent": "12:44 PM",
+              "timecreated": 1547120642,
+              "isread": 0
+          },
+          {
+              "id": 2,
+              "useridfrom": 4,
+              "useridto": 3,
+              "text": "<p>unread notification, from message, From teacher</p>",
+              "displayblocktime": false,
+              "blocktime": "Thursday, 10 January 2019",
+              "position": "left",
+              "timesent": "12:50 PM",
+              "timecreated": 1547121034,
+              "isread": 1
+          }
+      ],
+      "isblocked": false
+  } */    
+
+  }
+
+
+  /**
+   * 
+   * Search Contacts.
+   */
+
+  searchContacts(searchText){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_search_contacts")
+    .set("searchtext", searchText);
+    //.set("onlymycourses", "0");
+    
+    return this.sendPostRequest(body.toString());
+
+ /* [
+      {
+          "id": 2,
+          "fullname": "Admin Admin",
+          "profileimageurl": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f1",
+          "profileimageurlsmall": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f2"
+      }
+  ] */
+
+  }
+
+  /**
+   * 
+   * send Message
+   */
+
+  sendMessage(toUserId, message){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_send_instant_messages")
+    .set("messages[0][touserid]", toUserId)
+    .set("messages[0][text]", message);
+    
+    return this.sendPostRequest(body.toString());
+
+/*     [
+      {
+          "msgid": 7
+      }
+  ] */
+
+  }
+
+
+  /**
+   * 
+   * create message contacts.
+   */
+
+  createContacts(userId){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_create_contacts")
+    .set("userids[0]", userId);
+    
+    return this.sendPostRequest(body.toString());
+
+    
+/*     [] // already in the list.
+
+    [] // newly created. 
+*/
+
+  }
+
+  /**
+   * 
+   * delete message contacts.
+   */
+
+  deleteContacts(userId){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_delete_contacts")
+    .set("userids[0]", userId);
+    
+    return this.sendPostRequest(body.toString());
+
+    // returns null
+    // http response status: 200
+
+  }
+
+
+  /**
+   * 
+   * get list of message contacts.
+   */
+
+  getMessageContacts(){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_data_for_messagearea_contacts")
+    .set("userids[0]", this.userId.toString());
+    
+    return this.sendPostRequest(body.toString());
+
+/*     {
+      "contacts": [
+          {
+              "userid": 4,
+              "fullname": "Vonnie Bromfield",
+              "profileimageurl": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f1",
+              "profileimageurlsmall": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f2",
+              "ismessaging": false,
+              "sentfromcurrentuser": false,
+              "lastmessage": null,
+              "messageid": null,
+              "showonlinestatus": true,
+              "isonline": true,
+              "isread": false,
+              "isblocked": false,
+              "unreadcount": null
+          }
+      ]
+  } */
+
+  }
+
 
 
 }

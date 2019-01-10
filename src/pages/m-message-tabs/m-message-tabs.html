@@ -1,0 +1,17 @@
+<ion-header>
+
+    <ion-navbar  color="primary">
+      <ion-title>Message</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding>
+
+    <ion-tabs color="primary">
+        <ion-tab [root]="messagePage" tabTitle="Messages" tabIcon="chatboxes"></ion-tab>
+        <ion-tab [root]="contactsPage" tabTitle="Contacts" tabIcon="contacts"></ion-tab>
+    </ion-tabs>
+  
+  </ion-content>

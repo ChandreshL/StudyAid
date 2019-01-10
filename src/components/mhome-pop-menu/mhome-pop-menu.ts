@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {ViewController} from "ionic-angular";
+import { ViewController, App } from "ionic-angular";
+import { MoodledataProvider } from './../../providers/moodledata/moodledata';
+
 
 
 @Component({
@@ -7,7 +9,10 @@ import {ViewController} from "ionic-angular";
 })
 export class MhomePopMenuComponent {
 
-  constructor(public viewCtrl: ViewController) {
+  constructor(
+    public viewCtrl: ViewController,
+    public app: App,
+    private mdata: MoodledataProvider) {
   }
 
   logout() {
@@ -15,11 +20,14 @@ export class MhomePopMenuComponent {
     //confirm logout
 
     //logout moodle here
-    //clear the user token 
-    //clear the database
-
+    this.mdata.logout();
+    
     //close the menu
     this.viewCtrl.dismiss();
+
+    //pop to root
+    this.app.getActiveNav().popToRoot();
+
   }
 
 }

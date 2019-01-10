@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {MloginPage} from "../mlogin/mlogin";
 import {MhomePage} from "../mhome/mhome";
+import { MMessageTabsPage } from './../m-message-tabs/m-message-tabs';
 import {ShomePage} from "../shome/shome";
 import {LhomePage} from "../lhome/lhome";
+
 import { MoodledataProvider } from './../../providers/moodledata/moodledata';
 
 
@@ -18,16 +20,24 @@ export class HomePage {
     private mdata: MoodledataProvider
     ) {
 
+
   }
 
-  openMoodle(){
+  openMoodle(page){
 
     this.mdata.isLoggedIn().then(value => {
 
+      console.log(value);
+      console.log(page);
+
       if(value){
-        this.navCtrl.push(MhomePage);
+        if(page === "home"){
+          this.navCtrl.push(MhomePage);
+        }else{
+          this.navCtrl.push(MMessageTabsPage);
+        }
       }else{
-        this.navCtrl.push(MloginPage);
+        this.navCtrl.push(MloginPage, { returnTo: page});
       }
     });
 

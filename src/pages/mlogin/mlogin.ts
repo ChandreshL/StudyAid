@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {MhomePage} from "../mhome/mhome";
+import { MMessageTabsPage } from './../m-message-tabs/m-message-tabs';
 import { AlertController } from "ionic-angular";
 import { MoodledataProvider } from './../../providers/moodledata/moodledata';
 
@@ -13,6 +14,7 @@ import { MoodledataProvider } from './../../providers/moodledata/moodledata';
 export class MloginPage {
 
   loader: any;
+  returnTo: string;
 
   constructor(
     private mdata: MoodledataProvider,
@@ -20,6 +22,9 @@ export class MloginPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController) {
+
+      this.returnTo = this.navParams.get('returnTo');
+
   }
 
   tryLogin(FormLogin){
@@ -37,7 +42,12 @@ export class MloginPage {
   
             this.loader.dismiss();
             this.navCtrl.pop();
-            this.navCtrl.push(MhomePage);
+            if(this.returnTo === "home"){
+              this.navCtrl.push(MhomePage);
+            }else{
+              this.navCtrl.push(MMessageTabsPage);
+            }
+
   
           }else{
             FormLogin.password = "";

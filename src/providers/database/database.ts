@@ -46,6 +46,15 @@ export class DatabaseProvider extends  Dexie{
     });
   }
 
+  clearAllTables(){
+
+    this.user.clear();
+    this.site.clear();
+    this.enrolledCourses.clear();
+    this.courseSectionContent.clear();
+
+  }
+
 }
 
 export interface IUser{
