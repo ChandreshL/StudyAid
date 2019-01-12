@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { App, IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 
+import { MessageUserPage } from './../message-user/message-user';
 import { MoodleMessageDataProvider } from './../../providers/moodle-message-data/moodle-message-data';
 import { IContact, IMsgContact } from './../../providers/database/database';
 
@@ -18,6 +19,7 @@ export class ContactsPage {
   loader: any;
 
   constructor(
+    private app: App,
     public navCtrl: NavController, 
     public navParams: NavParams,
     private msgData: MoodleMessageDataProvider,
@@ -34,9 +36,15 @@ export class ContactsPage {
 
   }
 
-  openMessage(otherUserId){
-    //item.close(); ItemSliding
-    //console.log(otherUserId);
+  openConversation(otherUserId){
+
+    let rootNav = this.app.getRootNavs()[0];
+
+    if(rootNav){
+      rootNav.push(MessageUserPage,{otherUserId: otherUserId});
+    }
+    //this.navCtrl.push(MessageUserPage,{otherUserId: otherUserId});
+       
   }
 
   searchContacts(){

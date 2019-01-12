@@ -262,7 +262,7 @@ export class MoodleApiProvider {
     .set("wstoken", this.token )
     .set("moodlewsrestformat", "json")
     .set("wsfunction", "core_message_data_for_messagearea_messages")
-    .set("newest", "1")
+    .set("newest", "0")
     .set("timefrom", "0")
     .set("currentuserid", this.userId.toString())
     .set("otheruserid", otherUserId)
@@ -306,6 +306,29 @@ export class MoodleApiProvider {
       ],
       "isblocked": false
   } */    
+
+  }
+
+
+/**
+ * 
+ * Mark all messages as read for a given user
+ * 
+ * core_message_mark_all_messages_as_read
+ */
+  markAllMessagesRead(otherUserId){
+
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_mark_all_messages_as_read")
+    .set("useridto", this.userId.toString())
+    .set("useridfrom", otherUserId);
+
+    return this.sendPostRequest(body.toString());
+
+    //return int 
+    //True if the messages were marked read, false otherwise
 
   }
 

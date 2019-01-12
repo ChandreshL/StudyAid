@@ -1,7 +1,7 @@
-import { MessageUserPage } from './../message-user/message-user';
 import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { MessageUserPage } from './../message-user/message-user';
 import { MoodleMessageDataProvider } from './../../providers/moodle-message-data/moodle-message-data';
 import { IMsgContact } from './../../providers/database/database';
 
@@ -22,8 +22,6 @@ export class MessagePage {
   }
 
   ionViewDidLoad() {
-
-    console.log("get inital data");
     
     this.msgData.getConversations().then(data => {
       if(data) this.conversationList = data as Array<IMsgContact>;
@@ -31,9 +29,13 @@ export class MessagePage {
 
   }
 
+  ionViewWillEnter(){
+    this.doRefresh(null);
+  }
+
   openConversation(index: number){
     let otherUserId = this.conversationList[index].userid;
-    let rootNav = this.app.getRootNav();
+    let rootNav = this.app.getRootNavs()[0];
     if(rootNav){
       rootNav.push(MessageUserPage,{otherUserId: otherUserId});
     }

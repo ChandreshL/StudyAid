@@ -40,7 +40,8 @@
         </ion-item>
 
         <ion-item-options side="right">
-            <button ion-button (click)="addContact(item.id)">Add</button>
+            <button ion-button (click)="openConversation(item.id)">message</button>
+            <button ion-button color="balanced" (click)="addContact(item.id)">add</button>
         </ion-item-options>
 
       </ion-item-sliding>
@@ -63,7 +64,7 @@
           </ion-item>
   
           <ion-item-options side="right">
-              <button ion-button (click)="openMessage(item.userid)">message</button>
+              <button ion-button (click)="openConversation(item.userid)">message</button>
               <button ion-button color="danger" (click)="removeContact(item.userid)">delete</button>
           </ion-item-options>
 

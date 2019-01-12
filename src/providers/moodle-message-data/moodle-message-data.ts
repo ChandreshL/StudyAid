@@ -106,7 +106,7 @@ export class MoodleMessageDataProvider {
 
 
   /**
-   * Messages
+   * Conversations
    */
   getConversations(){
     return new Promise(resolve => {
@@ -200,13 +200,41 @@ export class MoodleMessageDataProvider {
     //Mark msg as read. when displayed.
   }
 
+  markAmarkAllMessagesRead(otherUserId){
+
+    return new Promise(resolve => {
+      this.mAPI.markAllMessagesRead(otherUserId).subscribe(data =>{
+        if(data){
+          resolve(true);
+        }else{
+          resolve(false);
+        }
+      },error => {
+        resolve(false);
+      });
+    });
+
+  }
+
   saveMessagesToDb(messages){
     this.mdb.saveListToDb(this.mdb.userMessage, messages as Array<IMsgUserMessage>);
   }
 
   sendMessageToUser(otherUserId, Message){
      //getMessageFromUser use limits to get only new messages.
-
+     return new Promise(resolve =>{
+      this.mAPI.sendMessage(otherUserId, Message).subscribe(data=>{
+        if(data && this.isArray(data)){
+          resolve(true);
+        }else{
+          resolve(false);
+        }
+      },error=> {
+        resolve(false);
+        console.error("error MoodleMessageData sendMessageToUser");
+      });
+     });
+      
   }
 
 
