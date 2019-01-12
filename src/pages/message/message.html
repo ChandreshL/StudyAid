@@ -1,9 +1,3 @@
-<!--
-  Generated template for the MessagePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -14,5 +8,23 @@
 
 
 <ion-content padding>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-list>
+
+          <ion-item *ngFor="let item of conversationList;  let i = index;" (click)="openConversation(i);">
+            <ion-avatar item-start>
+              <img src="{{ item.profileimageurlsmall }}">
+              <!-- <ion-badge color="danger">{{ item.unreadcount }}</ion-badge> -->
+              <ion-badge color="danger">3</ion-badge>
+            </ion-avatar>
+            <h2>{{ item.fullname }}</h2>
+            <p>{{ item.lastmessage }}</p>
+          </ion-item>
+
+      </ion-list>
+
 
 </ion-content>

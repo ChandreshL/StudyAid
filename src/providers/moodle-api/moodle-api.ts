@@ -26,7 +26,9 @@ export class MoodleApiProvider {
       this.userId = u;
   }
 
-
+  getUserId(){
+    return this.userId;
+  }
 
 /*
 * Send http request
@@ -321,17 +323,9 @@ export class MoodleApiProvider {
     .set("wsfunction", "core_message_search_contacts")
     .set("searchtext", searchText);
     //.set("onlymycourses", "0");
-    
-    return this.sendPostRequest(body.toString());
 
- /* [
-      {
-          "id": 2,
-          "fullname": "Admin Admin",
-          "profileimageurl": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f1",
-          "profileimageurlsmall": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f2"
-      }
-  ] */
+    //return type Array<IContact>
+    return this.sendPostRequest(body.toString());
 
   }
 
@@ -415,29 +409,9 @@ export class MoodleApiProvider {
     .set("wstoken", this.token )
     .set("moodlewsrestformat", "json")
     .set("wsfunction", "core_message_data_for_messagearea_contacts")
-    .set("userids[0]", this.userId.toString());
+    .set("userid", this.userId.toString());
     
     return this.sendPostRequest(body.toString());
-
-/*     {
-      "contacts": [
-          {
-              "userid": 4,
-              "fullname": "Vonnie Bromfield",
-              "profileimageurl": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f1",
-              "profileimageurlsmall": "http://localhost/moodle/theme/image.php/boost/core/1527652034/u/f2",
-              "ismessaging": false,
-              "sentfromcurrentuser": false,
-              "lastmessage": null,
-              "messageid": null,
-              "showonlinestatus": true,
-              "isonline": true,
-              "isread": false,
-              "isblocked": false,
-              "unreadcount": null
-          }
-      ]
-  } */
 
   }
 

@@ -21,6 +21,7 @@ import {MpeekCoursePage} from "../pages/mpeek-course/mpeek-course";
 import { MMessageTabsPage } from './../pages/m-message-tabs/m-message-tabs';
 import { ContactsPage } from './../pages/contacts/contacts';
 import { MessagePage } from './../pages/message/message';
+import { MessageUserPage } from './../pages/message-user/message-user';
 
 import {ShomePage} from "../pages/shome/shome";
 import {SlistPage} from "../pages/slist/slist";
@@ -47,6 +48,7 @@ import { MoodleMessageDataProvider } from '../providers/moodle-message-data/mood
     MMessageTabsPage,
     MessagePage,
     ContactsPage,
+    MessageUserPage,
     ShomePage,
     SlistPage,
     ScalenderPage,
@@ -72,7 +74,8 @@ import { MoodleMessageDataProvider } from '../providers/moodle-message-data/mood
     McourseContentPage,
     MMessageTabsPage,
     MessagePage,
-    ContactsPage,    
+    ContactsPage,
+    MessageUserPage,    
     ShomePage,
     SlistPage,
     ScalenderPage,

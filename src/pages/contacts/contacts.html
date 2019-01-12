@@ -10,9 +10,64 @@
     <ion-title>contacts</ion-title>
   </ion-navbar>
 
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search contacts"
+                   [(ngModel)]="queryText"
+                   (ionInput)="searchContacts()"
+                   [debounce]="1000">
+    </ion-searchbar>
+
+  </ion-toolbar>
+
 </ion-header>
 
-
 <ion-content padding>
+    <ion-refresher [enabled]="showContactList" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+  <!-- search list -->
+      <p *ngIf="!showContactList">Search result</p>
+      <ion-list *ngIf="!showContactList">
+      <ion-item-sliding *ngFor="let item of searchResult;">
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ item.profileimageurlsmall }}">
+          </ion-avatar>
+          <h2>{{ item.fullname }}</h2>
+          <p></p>
+        </ion-item>
+
+        <ion-item-options side="right">
+            <button ion-button (click)="addContact(item.id)">Add</button>
+        </ion-item-options>
+
+      </ion-item-sliding>
+      
+      </ion-list>
+
+      <!-- contact list -->
+      <p *ngIf="showContactList">Contact list</p>
+      <ion-list *ngIf="showContactList">
+
+        <ion-item-sliding *ngFor="let item of contactList;  let i = index;">
+  
+          <ion-item>
+            <ion-avatar item-start>
+              <img src="{{ item.profileimageurlsmall }}">
+            </ion-avatar>
+            <h2>{{ item.fullname }}</h2>
+            <p *ngIf="item.isonline; else offline">online</p>
+            <ng-template #offline>offline</ng-template>
+          </ion-item>
+  
+          <ion-item-options side="right">
+              <button ion-button (click)="openMessage(item.userid)">message</button>
+              <button ion-button color="danger" (click)="removeContact(item.userid)">delete</button>
+          </ion-item-options>
+
+        </ion-item-sliding>  
+      </ion-list>
 
 </ion-content>

@@ -26,10 +26,6 @@ export class HomePage {
   openMoodle(page){
 
     this.mdata.isLoggedIn().then(value => {
-
-      console.log(value);
-      console.log(page);
-
       if(value){
         if(page === "home"){
           this.navCtrl.push(MhomePage);

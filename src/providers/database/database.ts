@@ -11,6 +11,9 @@ export class DatabaseProvider extends  Dexie{
   site: Dexie.Table<ISite, string>; // number = type of the primkey
   enrolledCourses: Dexie.Table<ImEnrolledCourse, number>;
   courseSectionContent: Dexie.Table<ImCourseSectionContent, number>;
+  msgContact: Dexie.Table<IMsgContact, number>;
+  msgConversation: Dexie.Table<IMsgContact, number>;
+  userMessage: Dexie.Table<IMsgUserMessage, number>;
 
   constructor() {
     super("StudyAidDb");
@@ -19,7 +22,10 @@ export class DatabaseProvider extends  Dexie{
         user: "token",
         site: "siteurl",
         enrolledCourses: "id",
-        courseSectionContent: "id, courseId"
+        courseSectionContent: "id, courseId",
+        msgContact: "userid",
+        msgConversation: "userid",
+        userMessage: "id, useridfrom"
     });
   }
 
@@ -41,7 +47,7 @@ export class DatabaseProvider extends  Dexie{
       }
 
     }).catch(e => {
-      console.log("Error, moodledata saveToDb");
+      console.log("Error, moodledata saveToDb", e);
       //console.log(e.stack || e);
     });
   }
@@ -52,6 +58,8 @@ export class DatabaseProvider extends  Dexie{
     this.site.clear();
     this.enrolledCourses.clear();
     this.courseSectionContent.clear();
+    this.msgContact.clear();
+    this.msgConversation.clear();
 
   }
 
@@ -112,10 +120,11 @@ export interface ImCourseSectionContent {
 
 }
 
-
-export interface IContacts {
+export interface IContact {
   id: number,
-  fullname: string
+  fullname: string,
+  profileimageurl: string,
+  profileimageurlsmall: string
 }
 
 export interface ImCourse {
@@ -131,7 +140,7 @@ export interface ImCourse {
   summaryformat: number,
   summaryfiles: Array<string>,
   overviewfiles: Array<string>,
-  contacts: Array<IContacts>,
+  contacts: Array<IContact>,
   enrollmentmethods: Array<string>
 
 }
@@ -151,218 +160,33 @@ export interface ImCourseEnrolmentMethods {
   wsfunction: string,   // Optional webservice function to get more information
 }
 
+export interface IMsgContact{
 
+  userid: number,
+  fullname: string,
+  profileimageurl: string,
+  profileimageurlsmall: string,
+  ismessaging: boolean,
+  sentfromcurrentuser: boolean,
+  lastmessage: string,
+  messageid: number,
+  showonlinestatus: boolean,
+  isonline: boolean,
+  isread: boolean,
+  isblocked: boolean,
+  unreadcount: number
 
+}
 
-/* export class User implements IUser{
-
-  token:string;
-  privatetoken?: string;
-
-  constructor(token:string, privatetoken?: string) {
-    this.token = token;
-    if (privatetoken) this.privatetoken = privatetoken;
-  }
-
-  static fromJSON(data){
-
-    if((typeof data) != "object")
-      data = JSON.parse(data);
-
-    return new User(
-      data.hasOwnProperty('token') ? data.token : "",
-      data.hasOwnProperty('privatetoken') ? data.privatetoken : null
-    );
-
-  }
-
-} */
-
-/* export class Site implements  ISite{
-  constructor(
-    public firstname: string,
-    public fullname: string,
-    public lang: string,
-    public lastname: string,
-    public sitecalendartype: string,
-    public siteid: number,
-    public sitename: string,
-    public siteurl: string,
-    public usercalendartype: string,
-    public userid: number,
-    public username: string,
-    public userpictureurl: string
-  ){
-
-  }
-
-  static fromJSON(data){
-
-    if((typeof data) != "object")
-      data = JSON.parse(data);
-
-    return new Site(
-      data.hasOwnProperty('firstname') ? data.firstname : "",
-      data.hasOwnProperty('fullname') ? data.fullname : "",
-      data.hasOwnProperty('lang') ? data.lang : "",
-      data.hasOwnProperty('lastname') ? data.lastname : "",
-      data.hasOwnProperty('sitecalendartype') ? data.sitecalendartype : "",
-      data.hasOwnProperty('siteid') ? data.siteid : null,
-      data.hasOwnProperty('sitename') ? data.sitename : "",
-      data.hasOwnProperty('siteurl') ? data.siteurl : "",
-      data.hasOwnProperty('usercalendartype') ? data.usercalendartype : "",
-      data.hasOwnProperty('userid') ? data.userid : null,
-      data.hasOwnProperty('username') ? data.username : "",
-      data.hasOwnProperty('userpictureurl') ? data.userpictureurl : ""
-    );
-
-  }
-
-} */
-
-/* export class mCourse implements ImCourse{
-
-  constructor(
-    public id: number,
-    public fullname: string,
-    public displayname: string,
-    public shortname: string,
-    public categoryid: number,
-    public categoryname: string,
-    public sortorder: number,
-    public summary: string,
-    public summaryformat: number,
-    public summaryfiles: Array<string>,
-    public overviewfiles: Array<string>,
-    public contacts: Array<IContacts>,
-    public enrollmentmethods: Array<string>
-  ){}
-
-  static fromJSON(data){
-
-    if((typeof data) != "object")
-      data = JSON.parse(data);
-
-    return new mCourse(
-      data.hasOwnProperty('id') ? data.id : "",
-      data.hasOwnProperty('fullname') ? data.fullname : "",
-      data.hasOwnProperty('displayname') ? data.displayname : "",
-      data.hasOwnProperty('shortname') ? data.shortname : "",
-      data.hasOwnProperty('categoryid') ? data.categoryid : "",
-      data.hasOwnProperty('categoryname') ? data.categoryname : "",
-      data.hasOwnProperty('sortorder') ? data.sortorder : "",
-      data.hasOwnProperty('summary') ? data.summary : "",
-      data.hasOwnProperty('summaryformat') ? data.summaryformat : "",
-      null,
-      null,
-      null,
-      data.hasOwnProperty('enrollmentmethods') ? data.enrollmentmethods : ""
-    );
-  }
-
-} */
-
-/* export class mEnrolledCourse implements ImEnrolledCourse{
-  constructor(
-    public id: number,
-    public shortname: string,
-    public fullname: string,
-    public enrolledusercount: number,
-    public idnumber: string,
-    public visible: number,
-    public summary: string,
-    public summaryformat: number,
-    public format: string,
-    public showgrades: boolean,
-    public lang: string,
-    public enablecompletion: boolean,
-    public category: number,
-    public progress: number,
-    public startdate: number,
-    public enddate: number
-  ){}
-
-  static fromJSON(data){
-
-    if((typeof data) != "object")
-      data = JSON.parse(data);
-
-    return new mEnrolledCourse(
-      data.hasOwnProperty('id') ? data.id : null,
-      data.hasOwnProperty('shortname') ? data.shortname : null,
-      data.hasOwnProperty('fullname') ? data.fullname : null,
-      data.hasOwnProperty('enrolledusercount') ? data.enrolledusercount : null,
-      data.hasOwnProperty('idnumber') ? data.idnumber : null,
-      data.hasOwnProperty('visible') ? data.visible : null,
-      data.hasOwnProperty('summary') ? data.summary : null,
-      data.hasOwnProperty('summaryformat') ? data.summaryformat : null,
-      data.hasOwnProperty('format') ? data.format : null,
-      data.hasOwnProperty('showgrades') ? data.showgrades : null,
-      data.hasOwnProperty('lang') ? data.lang : null,
-      data.hasOwnProperty('enablecompletion') ? data.enablecompletion : null,
-      data.hasOwnProperty('category') ? data.category : null,
-      data.hasOwnProperty('progress') ? data.progress : null,
-      data.hasOwnProperty('startdate') ? data.startdate : null,
-      data.hasOwnProperty('enddate') ? data.enddate : null
-    );
-  }
-
-} */
-
-
-/* export class mCourseSectionContent {
-
-  constructor(
-    public courseId: number,
-    public id:  number,
-    public name:  string,
-    public visible:  number,
-    public summary:  string,
-    public summaryformat:  number,
-    public section:  number,
-    public hiddenbynumsections:  number,
-    public uservisible:  boolean
-  ){
-
-  }
-
-  static fromJSON(data){
-
-    if((typeof data) != "object")
-      data = JSON.parse(data);
-
-    return new mCourseSectionContent(
-      data.hasOwnProperty('courseId') ? data.courseId : "",
-      data.hasOwnProperty('id') ? data.id : "",
-      data.hasOwnProperty('name') ? data.name : "",
-      data.hasOwnProperty('visible') ? data.visible : "",
-      data.hasOwnProperty('summary') ? data.summary : "",
-      data.hasOwnProperty('summaryformat') ? data.summaryformat : null,
-      data.hasOwnProperty('section') ? data.section : "",
-      data.hasOwnProperty('hiddenbynumsections') ? data.hiddenbynumsections : "",
-      data.hasOwnProperty('uservisible') ? data.uservisible : ""
-    );
-  }
-
-  static fromJSONWithCourse(courseid, data){
-
-    if(courseid) return;
-
-    if((typeof data) != "object")
-      data = JSON.parse(data);
-
-    return new mCourseSectionContent(
-      courseid,
-      data.hasOwnProperty('id') ? data.id : "",
-      data.hasOwnProperty('name') ? data.name : "",
-      data.hasOwnProperty('visible') ? data.visible : "",
-      data.hasOwnProperty('summary') ? data.summary : "",
-      data.hasOwnProperty('summaryformat') ? data.summaryformat : null,
-      data.hasOwnProperty('section') ? data.section : "",
-      data.hasOwnProperty('hiddenbynumsections') ? data.hiddenbynumsections : "",
-      data.hasOwnProperty('uservisible') ? data.uservisible : ""
-    );
-  }
-
-
-} */
+export interface IMsgUserMessage{
+  id: number,
+  useridfrom: number,
+  useridto: number,
+  text: string,
+  displayblocktime: boolean,
+  blocktime: string,  //"Thursday, 10 January 2019",
+  position: string,   //"right",
+  timesent:  string,  // "12:44 PM",
+  timecreated: number,
+  isread: number
+}

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 
-import {IContacts, ImCourseEnrolmentMethods, ImEnrolledCourse, ImCourse} from "../../providers/database/database";
+import {IContact, ImCourseEnrolmentMethods, ImEnrolledCourse, ImCourse} from "../../providers/database/database";
 import { MoodledataProvider } from './../../providers/moodledata/moodledata';
 
 
@@ -85,7 +85,7 @@ export class MpeekCoursePage {
 
   }
 
-  getTeachersName(contacts: Array<IContacts>){
+  getTeachersName(contacts: Array<IContact>){
     let contactsStr = "";
     contacts.forEach(c => {
       if(c.fullname) contactsStr += ", " + c.fullname;
