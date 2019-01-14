@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { MoodleApiProvider } from './../moodle-api/moodle-api';
 import { DatabaseProvider, IUser, ISite, ImEnrolledCourse, ImCourseSectionContent } from './../database/database';
+import { File } from '@ionic-native/file';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 
 @Injectable()
 export class MoodledataProvider {
 
   constructor(
     public mdb: DatabaseProvider,
-    public mAPI: MoodleApiProvider
+    public mAPI: MoodleApiProvider,
+    private file: File
   ) {
   }
 
@@ -267,6 +270,51 @@ export class MoodledataProvider {
     });
 
   });
+
+  }
+
+  //Download file
+  downloadFile(filename, fileurl){
+
+    return new Promise(resolve => {
+      this.mAPI.downloadFile(fileurl).subscribe((event: HttpEvent<any>) => {
+        switch (event.type) {
+            case HttpEventType.Sent:
+                //console.log('Request sent!');
+                break;
+            case HttpEventType.ResponseHeader:
+                //console.log('Response header received!');
+                break;
+            case HttpEventType.DownloadProgress:
+                //i use a gloal progress variable to save progress in percent
+                //console.log("progress: " + Math.trunc(event.loaded / event.total * 100));
+                break;
+            case HttpEventType.Response:
+                //do whatever you have to do with the file using event.body
+                //this.saveFile(filename, event.body);
+                resolve(true);
+        }
+      },error=>{
+        resolve(false);
+      });
+    });
+  }
+
+  saveFile(filename, resultFile){
+    let path = this.file.externalRootDirectory + '/Download/'; // for Android
+    this.file.writeFile(path, filename, resultFile , { replace: true }).then(() => {
+          //this.toastCtrl.showToast('File has been downloaded. Please check your downloads folder.');
+          console.log("downloaded");
+
+        }, (err) => {
+            alert("Sorry. An error occurred downloading the file: " + err);
+            
+            console.log("Error");
+        }
+    );
+  }
+
+  getStatusMessage(event){
 
   }
 

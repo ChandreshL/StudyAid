@@ -116,8 +116,24 @@ export interface ImCourseSectionContent {
   summaryformat:  number,
   section:  number,
   hiddenbynumsections:  number,
-  uservisible:  boolean
+  uservisible:  boolean,
+  modules: Array<ImSectionModule>
+  
+}
 
+export interface ImSectionModule{
+  id: number,
+  name: string,
+  visible: number,
+  uservisible: boolean,
+  contents: Array<ImModuleContent>
+}
+
+export interface ImModuleContent{
+  type: string,
+  filename: string,
+  fileurl: string,
+  mimetype: string
 }
 
 export interface IContact {

@@ -101,7 +101,7 @@ export class MhomePage {
 
     }).catch(reason => {
       
-      console.log("error getting from api");
+      console.log("error mhome getCoursesFromAPI.");
       this.loader.dismissAll();
     });
 

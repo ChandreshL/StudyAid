@@ -12,8 +12,6 @@
 
 </ion-header>
 
-
-
 <ion-content>
 
   <ion-card *ngFor="let item of courseSections;">
@@ -22,6 +20,37 @@
     </ion-card-header>
     <ion-card-content >
       <div [innerHtml]="item.summary"></div>
+      <br/>
+      <div *ngIf="item.modules && item.modules[0]">
+
+          <ion-grid *ngFor="let mod of item.modules" >
+            <ion-row *ngIf="mod.uservisible && mod.contents && mod.contents[0]">
+              <ion-col class="file-link">
+                  <b>{{ mod.name }}</b>
+              </ion-col>
+              <ion-col col-auto class="downloadbtn">
+                  <ion-spinner *ngIf="downloadingFile" name="bubbles"></ion-spinner>
+                  <button *ngIf="mod.contents[0].type === 'file' && !downloadingFile" 
+                    (click)="downloadFile(mod.contents[0].filename, mod.contents[0].fileurl)" 
+                    ion-button clear>
+                      <ion-icon name="cloud-download"></ion-icon>
+                  </button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        <!-- <ul *ngFor="let mod of item.modules" style="list-style: none">
+            <li *ngIf="mod.uservisible && mod.contents && mod.contents[0]">
+              <h6>{{ mod.name }}</h6>&nbsp;
+              <button *ngIf="mod.contents[0].type === 'file'" 
+                (click)="downloadFile(mod.contents[0].filename, mod.contents[0].fileurl)" 
+                ion-button clear>
+                <ion-icon name="cloud-download"></ion-icon>
+              </button>
+            </li>
+        </ul> -->
+
+      </div>
     </ion-card-content>
   </ion-card>
 

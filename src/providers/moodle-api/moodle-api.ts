@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -53,6 +53,22 @@ export class MoodleApiProvider {
       httpOptions
     );
 
+  }
+
+  downloadFile(fileurl){
+
+    let body = new HttpParams()
+      .set("wstoken", this.token );
+
+    this.sendPostRequest(body.toString());
+
+    let req = new HttpRequest('POST', fileurl, body.toString(), 
+    { 
+      responseType: 'arraybuffer',
+      reportProgress: true
+    });
+
+    return this.http.request(req); 
   }
 
 

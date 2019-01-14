@@ -1,3 +1,19 @@
 page-mcourse-content {
+  
+  ion-col{
+    height: 40px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+  }
+
+  .file-link{
+    color: steelblue;
+  }
+
+  .downloadbtn{
+    background-color:lightgray;
+  }
 
 }
