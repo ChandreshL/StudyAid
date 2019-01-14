@@ -16,4 +16,10 @@ page-mcourse-content {
     background-color:lightgray;
   }
 
+  a {
+    cursor: pointer;
+    user-select: none;
+    pointer-events: none;
+  }
+
 }

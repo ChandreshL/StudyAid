@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 
@@ -19,6 +19,7 @@ import { MoodledataProvider } from './../../providers/moodledata/moodledata';
   templateUrl: 'mcourse-content.html',
 })
 export class McourseContentPage {
+  @ViewChild('linkgrabber') linkgrabber: ElementRef;
 
   private courseId: number;
   private courseName: string;
@@ -61,6 +62,7 @@ export class McourseContentPage {
         });
 
         this.courseSections = data;
+        this.setAnchorLinks();
 
       } else {
         this.getCourseContentFromAPI();
@@ -80,12 +82,31 @@ export class McourseContentPage {
 
       if(data){
         this.courseSections = data;
+        this.setAnchorLinks();
       }
     }).catch(reason => {
       console.log("error getting from api");
     });
 
     if(this.loader) this.loader.dismissAll();
+  }
+
+  setAnchorLinks(){
+    setTimeout(() => {
+      let ContentElement = this.linkgrabber.nativeElement;
+      if(ContentElement){
+        let arrayOfLinks = (ContentElement as HTMLElement).querySelectorAll('a');
+        
+        for (let i = 0; i < arrayOfLinks.length; i++) {
+          let anchor = arrayOfLinks[i];
+          anchor.onclick = function(ev) {
+            window.open(anchor.href, '_system');
+            ev.preventDefault();
+            return false;
+          };
+        };
+      }
+    }, 1000);
   }
 
   downloadFile(filename, fileurl){

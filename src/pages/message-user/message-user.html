@@ -19,8 +19,8 @@
 
     <div *ngFor="let msg of messageList"
          class="message"
-         [class.right]=" msg.useridfrom === otherUser.userid "
-         [class.left]=" msg.useridfrom !== otherUser.userid ">
+         [class.left]=" msg.useridfrom === otherUser.userid "
+         [class.right]=" msg.useridfrom !== otherUser.userid ">
 
        <!-- <img class="user-img" [src]="msg.userAvatar" alt="" src=""> 
        <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>  -->
