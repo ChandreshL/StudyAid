@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Message</ion-title>
+    <ion-title>{{ otherUserName }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -19,8 +19,8 @@
 
     <div *ngFor="let msg of messageList"
          class="message"
-         [class.left]=" msg.useridfrom === otherUser.userid "
-         [class.right]=" msg.useridfrom !== otherUser.userid ">
+         [class.left]=" msg.useridfrom === otherUserId "
+         [class.right]=" msg.useridfrom !== otherUserId ">
 
        <!-- <img class="user-img" [src]="msg.userAvatar" alt="" src=""> 
        <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>  -->
@@ -29,8 +29,8 @@
 
       <div class="msg-detail">
         <div class="msg-info">
-          <p *ngIf="msg.useridfrom === otherUser.userid"> {{ otherUser.fullname }}&nbsp;&nbsp;&nbsp;{{ msg.timesent }}</p>
-          <p *ngIf="msg.useridfrom !== otherUser.userid" #currentUser>Me&nbsp;&nbsp;&nbsp;{{ msg.timesent }}</p>
+          <p *ngIf="msg.useridfrom === otherUserId"> {{ otherUserName }}&nbsp;&nbsp;&nbsp;{{ msg.timesent }}</p>
+          <p *ngIf="msg.useridfrom !== otherUserId" #currentUser>Me&nbsp;&nbsp;&nbsp;{{ msg.timesent }}</p>
         </div>
         <div class="msg-content">
           <span class="triangle"></span>

@@ -12,6 +12,7 @@ import { IMsgContact } from './../../providers/database/database';
 })
 export class MessagePage {
 
+  conversationRefresh: any;
   conversationList: Array<IMsgContact> = [];
 
   constructor(
@@ -27,17 +28,22 @@ export class MessagePage {
       if(data) this.conversationList = data as Array<IMsgContact>;
     });
 
+    this.conversationRefresh = setInterval(()=>{
+      this.doRefresh(null);
+    },5000);
+
   }
 
-  ionViewWillEnter(){
-    this.doRefresh(null);
+  ionViewWillLeave(){
+    clearInterval(this.conversationRefresh);
   }
 
   openConversation(index: number){
     let otherUserId = this.conversationList[index].userid;
+    let otherUserName = this.conversationList[index].fullname;
     let rootNav = this.app.getRootNavs()[0];
     if(rootNav){
-      rootNav.push(MessageUserPage,{otherUserId: otherUserId});
+      rootNav.push(MessageUserPage,{otherUserId: otherUserId, otherUserName: otherUserName});
     }
     //this.navCtrl.push(MessageUserPage,{otherUserId: otherUserId});
        

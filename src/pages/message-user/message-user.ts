@@ -23,11 +23,12 @@ export class MessageUserPage {
   @ViewChild('msgListdiv', {read: ElementRef}) msgList: ElementRef;
   
   otherUserId: number;
-  otherUser: IMsgContact;
+  otherUserName: string;
   messageList: Array<IMsgUserMessage> = [];
   limitfrom: number = 0;
   editorMsg: string;
   sendingMsg: boolean;
+  msgRefresh: any;
   private mutationObserver: MutationObserver;
 
 
@@ -36,6 +37,7 @@ export class MessageUserPage {
      public navParams: NavParams,
      private msgdata: MoodleMessageDataProvider) {
       
+      this.otherUserName = "";
       this.editorMsg = "";
       this.sendingMsg = false;
 
@@ -52,25 +54,34 @@ export class MessageUserPage {
     });
 
     this.otherUserId = this.navParams.get('otherUserId');
+    this.otherUserName = this.navParams.get('otherUserName');
     
-    //get User.
-    this.msgdata.getConversationUser(this.otherUserId).then(data => {
-      if(data){
-        this.otherUser = data;
-        //get messages from database.
-        this.getMessagesFromDatabase();
-      }
-    });
+    console.log(this.otherUserName);
+
+    if(this.otherUserId){
+      //this.getMessagesFromDatabase();
+      this.getMessagesFromWebservice();
+    }else{
+      //Show error message.
+      console.error("Can not send message to unknown User.");
+    }
+
+    //refresh messages every 1 second.
+    this.msgRefresh = setInterval(()=>{
+            this.getMessagesFromWebservice();
+          },5000);
 
     //scroll to bottom
 
   }
 
-  
+  ionViewWillLeave(){
+    clearInterval(this.msgRefresh);
+  }
 
 
   getMessagesFromDatabase(){
-    this.msgdata.getMessagesFromUserdb(this.otherUser.userid).then(data =>{
+    this.msgdata.getMessagesFromUserdb(this.otherUserId).then(data =>{
       if(data){
           this.messageList = data;
           this.messageList.sort((a,b) => {
@@ -87,9 +98,13 @@ export class MessageUserPage {
   }
 
   getMessagesFromWebservice(){
-    this.msgdata.getMessagesFromUser(this.otherUser.userid, this.limitfrom).then(data => {
+
+  console.log("Before " + this.limitfrom);
+
+    this.msgdata.getMessagesFromUser(this.otherUserId, this.limitfrom).then(data => {
       
       if(data){
+        console.log(data);
           this.messageList.push.apply(this.messageList, data as Array<IMsgUserMessage>);
 
           this.messageList.sort((a,b) => {
@@ -101,9 +116,11 @@ export class MessageUserPage {
           this.limitfrom = this.messageList.length;
 
           //Mark new messages as read
-          this.msgdata.markAmarkAllMessagesRead(this.otherUser.userid);
+          this.msgdata.markAmarkAllMessagesRead(this.otherUserId);
         }
     });
+
+    console.log("After " + this.limitfrom);
 
   }
 
@@ -111,16 +128,21 @@ export class MessageUserPage {
     
     if(this.editorMsg.trim().length > 0){
       this.sendingMsg = true;
-    this.msgdata.sendMessageToUser(this.otherUser.userid, this.editorMsg).then(data=>{
       
+      //console.log(this.otherUser);
+
+
+    this.msgdata.sendMessageToUser(this.otherUserId, this.editorMsg).then(data=>{
+      
+      console.log(data);
       if(data){
         this.getMessagesFromWebservice();
         this.editorMsg = "";
       }
-      this.sendingMsg = false;
-    }).catch(error => {
-      this.sendingMsg = false;
-    });
+        this.sendingMsg = false;
+      }).catch(error => {
+        this.sendingMsg = false;
+      });
 
      }
 

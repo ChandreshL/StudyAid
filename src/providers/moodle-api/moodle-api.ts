@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 export class MoodleApiProvider {
 
   private siteUrl: string = "http://localhost/moodle";
+  //private siteUrl: string = "https://moodle.hochschule-rhein-waal.de";
   private authUrl: string = "login/token.php";
   private apiUrl: string = "webservice/rest/server.php";
   private token: string;
@@ -264,6 +265,21 @@ export class MoodleApiProvider {
 
   }
 
+
+  getUsersById(otherUserId){
+
+
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_message_data_for_messagearea_conversations")
+    .set("criteria[0][key]", "id")
+    .set("criteria[0][value]", otherUserId);
+
+    console.log(this.sendPostRequest(body.toString()));
+    //return this.sendPostRequest(body.toString());
+
+  }
   
   /**
    * 

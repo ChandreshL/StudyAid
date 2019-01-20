@@ -145,8 +145,20 @@ export class MoodleMessageDataProvider {
 
 
   getConversationUser(otherUserId){
+    
+    //to start new conversation there wont be any user in the database.
+    //if result is null then get the data from webservice.
+    
+    //Check if there is user
+
+    //get it from the API.
+
     return this.mdb.msgConversation.get(otherUserId);
   }
+
+
+  
+
 
   /**
    * For messages,

@@ -4,6 +4,7 @@ import { App, IonicPage, NavController, NavParams, LoadingController } from 'ion
 import { MessageUserPage } from './../message-user/message-user';
 import { MoodleMessageDataProvider } from './../../providers/moodle-message-data/moodle-message-data';
 import { IContact, IMsgContact } from './../../providers/database/database';
+import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 
 @IonicPage()
 @Component({
@@ -36,12 +37,20 @@ export class ContactsPage {
 
   }
 
-  openConversation(otherUserId){
+  openConversation(otherUserId, searchlist: boolean){
 
     let rootNav = this.app.getRootNavs()[0];
 
+    //console.log(otherUserId);
+    let fullname = "";
+    if(searchlist){
+      fullname = this.searchResult.find(s => s.id === otherUserId).fullname;
+    }else{
+      fullname = this.contactList.find(c => c.userid === otherUserId).fullname;
+    }
+
     if(rootNav){
-      rootNav.push(MessageUserPage,{otherUserId: otherUserId});
+      rootNav.push(MessageUserPage,{otherUserId: otherUserId, otherUserName: fullname});
     }
     //this.navCtrl.push(MessageUserPage,{otherUserId: otherUserId});
        
