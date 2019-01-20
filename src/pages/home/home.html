@@ -6,11 +6,11 @@
     </button>
 
     <ion-title>
-      Study Aid
+      StudyAid
     </ion-title>
   </ion-navbar>
 
-  <ion-toolbar color="secondary">
+  <!-- <ion-toolbar color="secondary">
     <ion-buttons end>
       <button ion-button (click)="openMoodle('home')">
         <ion-col>
@@ -57,55 +57,99 @@
       </button>
 
     </ion-buttons>
-  </ion-toolbar>
+  </ion-toolbar> -->
 
 </ion-header>
 
-<ion-content >
+<ion-content padding style="background-color: #202f47;">
+    <ion-refresher (ionRefresh)="getStatus($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-  <ion-card>
+  <ion-grid class="buttongrid">
+    <ion-row>
+      <ion-col col-4>
+        <button class="homeBtn" ion-button (click)="openMoodle('home')">
+          <ion-grid>
+            <ion-row justify-content-center>
+              <ion-icon name="school"></ion-icon>
+            </ion-row>
+            <ion-row  justify-content-center>
+              <span style="font-size: 1.0rem; padding-top: 5px;">moodle</span>
+            </ion-row>
+          </ion-grid>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+          <button class="homeBtn" ion-button (click)="openMoodle('msg')">
+              <ion-grid>
+                <ion-row justify-content-center>
+                  <ion-icon name="chatboxes"></ion-icon>
+                  <ion-badge [hidden]="unreadConversation === 0" color="danger">{{ unreadConversation }}</ion-badge>
+                </ion-row>
+                <ion-row   justify-content-center>
+                  <span style="font-size: 1.0rem; padding-top: 5px;">messages</span>
+                </ion-row>
+              </ion-grid>
+            </button>
+      </ion-col>
+      <ion-col col-4>
+          <button ion-button (click)="openSchedule()">
+              <ion-grid>
+                <ion-row justify-content-center>
+                  <ion-icon name="calendar"></ion-icon>
+                </ion-row>
+                <ion-row   justify-content-center>
+                  <span style="font-size: 1.0rem; padding-top: 5px;">schedule</span>
+                </ion-row>
+              </ion-grid>
+            </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+          <button class="homeBtn" ion-button (click)="openMoodle('home')">
+              <ion-grid>
+                <ion-row justify-content-center>
+                  <ion-icon name="help-buoy"></ion-icon>
+                </ion-row>
+                <ion-row  justify-content-center>
+                  <span style="font-size: 1.0rem; padding-top: 5px;">Services</span>
+                </ion-row>
+              </ion-grid>
+          </button>
+      </ion-col>
+      <ion-col col-6>
+          <button class="homeBtn" ion-button (click)="openMoodle('home')">
+              <ion-grid>
+                <ion-row justify-content-center>
+                  <ion-icon name="time"></ion-icon>
+                </ion-row>
+                <ion-row  justify-content-center>
+                  <span style="font-size: 1.0rem; padding-top: 5px;">Check Times</span>
+                </ion-row>
+              </ion-grid>
+            </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card class="ntfList" *ngFor="let item of notificationList;">
     <ion-card-content>
       <ion-row>
         <ion-col col-1 center>
-          <ion-icon name="alert"></ion-icon>
+          <ion-icon name="{{ item.icon }}"></ion-icon>
         </ion-col>
         <ion-col>
-          <p>
-            The most popular industrial group ever, and largely
-            responsible for bringing the music to a mass audience.
-          </p>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-content>
-      <ion-row>
-        <ion-col col-1 center>
-          <ion-icon name="alert"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <p>
-            The most popular industrial group ever, and largely
-            responsible for bringing the music to a mass audience.
-          </p>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-content>
-      <ion-row>
-        <ion-col col-1 center>
-          <ion-icon name="alert"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <p>
-            The most popular industrial group ever, and largely
-            responsible for bringing the music to a mass audience.
-          </p>
+          <ion-row><p>
+              {{ item.description }}
+            </p>
+          </ion-row>
+          <ion-row>
+              <p>
+                  {{ item.courseName }}
+                </p>
+          </ion-row>
         </ion-col>
       </ion-row>
     </ion-card-content>

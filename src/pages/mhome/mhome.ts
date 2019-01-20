@@ -41,7 +41,7 @@ export class MhomePage {
     this.storage.get('enrolled').then((val)=>{
 
       if(val == 'yes'){
-        this.getCoursesFromAPI();
+        this.getCoursesFromAPI(null);
       }else{
         this.getCoursesFromDb();
       }
@@ -68,8 +68,8 @@ export class MhomePage {
     this.navCtrl.push(MMessageTabsPage);
   }
 
-  refreshCourse(){
-    this.getCoursesFromAPI();
+  refreshCourse(refresher){
+    this.getCoursesFromAPI(refresher);
   }
 
 
@@ -84,7 +84,7 @@ export class MhomePage {
   }
 
 
-  getCoursesFromAPI(){
+  getCoursesFromAPI(refresher){
     this.loader.dismissAll();
     this.presentLoading();
 
@@ -96,13 +96,17 @@ export class MhomePage {
         this.coursesList = new Array<ImEnrolledCourse>();
       }
       
+      if(refresher) refresher.complete();
+
       this.loader.dismissAll();
-      
+
 
     }).catch(reason => {
+      if(refresher) refresher.complete();
       
       console.log("error mhome getCoursesFromAPI.");
       this.loader.dismissAll();
+
     });
 
   }

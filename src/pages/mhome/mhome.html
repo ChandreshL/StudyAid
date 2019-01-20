@@ -36,7 +36,7 @@
         </ion-col>
       </button>
 
-      <button ion-button (click)="refreshCourse()">
+      <button ion-button (click)="refreshCourse(null)">
         <ion-col>
           <ion-row justify-content-center>
             <ion-icon name="refresh-circle" ></ion-icon>
@@ -58,8 +58,11 @@
 
 
 <ion-content>
+<ion-refresher (ionRefresh)="getCoursesFromAPI($event)">
+    <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
 
-  <p>Enrolled courses</p>
+  <p>&nbsp;Enrolled courses</p>
 
   <ion-list>
 

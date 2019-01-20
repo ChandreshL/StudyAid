@@ -3,6 +3,7 @@ import { MoodleApiProvider } from './../moodle-api/moodle-api';
 import { DatabaseProvider, IUser, ISite, ImEnrolledCourse, ImCourseSectionContent } from './../database/database';
 import { File } from '@ionic-native/file';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { resolveDefinition } from '@angular/core/src/view/util';
 
 @Injectable()
 export class MoodledataProvider {
@@ -317,6 +318,42 @@ export class MoodledataProvider {
   getStatusMessage(event){
 
   }
+
+
+  //Home page updates
+
+  checkUnreadConversation(){
+    return new Promise(resolve => {
+      this.mAPI.getUnreadConversationsCount().subscribe(count=>{
+        if(count){
+          resolve(count);
+        }else{
+          resolve(0);
+        }
+      },error=>{
+        resolve(0);
+      });
+    });
+  }
+
+  getCalenderActionEvents(aftereventid){
+    return new Promise(resolve =>{
+      this.mAPI.getCalendarActionEvents(aftereventid).subscribe(data=>{
+        if(data && data.hasOwnProperty('events')){
+          if( this.isArray(data['events']) && data['events'].length > 0){
+            resolve(data['events']);
+          }else{
+            resolve(false);
+          }
+        }else{
+          resolve(false);
+        }
+      },error=>{
+        resolve(false);
+      });
+    });
+  }
+
 
   isArray(what) {
     return Object.prototype.toString.call(what) === '[object Array]';

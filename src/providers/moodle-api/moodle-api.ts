@@ -187,6 +187,18 @@ export class MoodleApiProvider {
   }
 
 
+  getCalendarActionEvents(aftereventid){
+    
+    const body = new HttpParams()
+    .set("wstoken", this.token )
+    .set("moodlewsrestformat", "json")
+    .set("wsfunction", "core_calendar_get_action_events_by_timesort")
+    .set("aftereventid", aftereventid.toString());
+
+    return this.sendPostRequest(body.toString());
+
+  }
+
 
 
   /**

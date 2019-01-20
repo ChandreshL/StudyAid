@@ -1,3 +1,52 @@
 page-home {
 
+  .homeBtn{
+    
+  }
+
+  .buttongrid{
+   
+  }
+
+  .buttongrid button{
+    display:block;
+    height: 100%;
+    width: 100%;
+    background-color: #314568;
+  }
+
+  .buttongrid button ion-badge{
+    position: absolute;
+    height: 1.5em;
+    width: 1.5em;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    
+		opacity: 0.9;
+
+		// & ~ ion-icon {
+		// 	margin-right: 1.2rem;
+		// }
+
+  }
+
+  .buttongrid ion-icon{
+    font-size: 3em;
+  }
+
+  .ntfList{
+    // background-color: #314568;
+    background-color: #214b5e;
+    color: #fff;
+  }
+
+  .ntfList ion-icon{
+    font-size: 2em;
+  }
+
+  .ntfList p{
+    padding-left: 1em;
+    color: #fff;
+  }
+
 }
