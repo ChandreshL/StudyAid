@@ -1,3 +1,4 @@
+import { SupportPage } from './../pages/support/support';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -54,6 +55,7 @@ import { MoodleMessageDataProvider } from '../providers/moodle-message-data/mood
     SlistPage,
     ScalenderPage,
     LhomePage,
+    SupportPage,
     MhomePopMenuComponent
 
   ],
@@ -81,6 +83,7 @@ import { MoodleMessageDataProvider } from '../providers/moodle-message-data/mood
     SlistPage,
     ScalenderPage,
     LhomePage,
+    SupportPage,
     MhomePopMenuComponent
   ],
   providers: [

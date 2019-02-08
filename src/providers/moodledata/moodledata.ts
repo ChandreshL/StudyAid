@@ -287,11 +287,11 @@ export class MoodledataProvider {
                 //console.log('Response header received!');
                 break;
             case HttpEventType.DownloadProgress:
-                //i use a gloal progress variable to save progress in percent
+                //a gloal progress variable to save progress in percent
                 //console.log("progress: " + Math.trunc(event.loaded / event.total * 100));
                 break;
             case HttpEventType.Response:
-                //do whatever you have to do with the file using event.body
+                //the file = event.body
                 //this.saveFile(filename, event.body);
                 resolve(true);
         }

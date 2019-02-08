@@ -91,6 +91,8 @@ export class McourseContentPage {
     if(this.loader) this.loader.dismissAll();
   }
 
+  //disable all <a> links in the page. 
+  //so no the app does not redirect to the other url
   setAnchorLinks(){
     setTimeout(() => {
       let ContentElement = this.linkgrabber.nativeElement;
@@ -131,7 +133,7 @@ export class McourseContentPage {
   presentToast(msg) {
     let toast = this.toastCtrl.create({
       message: msg,
-      duration: 1500,
+      duration: 3000,
       position: 'top'
     });
   

@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class MoodleApiProvider {
 
-  private siteUrl: string = "http://localhost/moodle";
-  //private siteUrl: string = "https://moodle.hochschule-rhein-waal.de";
+  //private siteUrl: string = "http://localhost/moodle";
+  private siteUrl: string = "https://moodle.hochschule-rhein-waal.de";
   private authUrl: string = "login/token.php";
   private apiUrl: string = "webservice/rest/server.php";
   private token: string;

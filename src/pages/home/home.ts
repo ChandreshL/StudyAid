@@ -1,3 +1,4 @@
+import { SupportPage } from './../support/support';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {MloginPage} from "../mlogin/mlogin";
@@ -158,5 +159,8 @@ export class HomePage {
     this.navCtrl.push(LhomePage);
   }
 
+  openSupport(){
+    this.navCtrl.push(SupportPage);
+  }
 
 }

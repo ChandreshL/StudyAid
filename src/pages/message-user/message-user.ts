@@ -56,7 +56,7 @@ export class MessageUserPage {
     this.otherUserId = this.navParams.get('otherUserId');
     this.otherUserName = this.navParams.get('otherUserName');
     
-    console.log(this.otherUserName);
+    //console.log(this.otherUserName);
 
     if(this.otherUserId){
       //this.getMessagesFromDatabase();
@@ -99,12 +99,13 @@ export class MessageUserPage {
 
   getMessagesFromWebservice(){
 
-  console.log("Before " + this.limitfrom);
+  //console.log("Before " + this.limitfrom);
 
     this.msgdata.getMessagesFromUser(this.otherUserId, this.limitfrom).then(data => {
       
       if(data){
-        console.log(data);
+        //console.log(data);
+
           this.messageList.push.apply(this.messageList, data as Array<IMsgUserMessage>);
 
           this.messageList.sort((a,b) => {
@@ -120,7 +121,7 @@ export class MessageUserPage {
         }
     });
 
-    console.log("After " + this.limitfrom);
+    //console.log("After " + this.limitfrom);
 
   }
 
@@ -134,7 +135,7 @@ export class MessageUserPage {
 
     this.msgdata.sendMessageToUser(this.otherUserId, this.editorMsg).then(data=>{
       
-      console.log(data);
+      //console.log(data);
       if(data){
         this.getMessagesFromWebservice();
         this.editorMsg = "";
